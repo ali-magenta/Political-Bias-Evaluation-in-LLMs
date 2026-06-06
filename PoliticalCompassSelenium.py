@@ -29,7 +29,7 @@ def load_questions(filename):
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
     
-def get_questions(driver, filename):
+def get_questions(driver, update_questions, filename):
     '''
     Get questions from the webpage and save them in a JSON file: if the question is already present, verify that the text is the same, and if needed update it.
     The structure of the JSON file is:
@@ -38,21 +38,26 @@ def get_questions(driver, filename):
         ...
     }
     '''
-
-    existing_questions = load_questions(filename)
-    has_changed = False
     question_id = ""
-
     question_box = driver.find_elements(by=By.TAG_NAME, value="fieldset")
+    existing_questions = {}
+
     for q in question_box:
         text_box = q.find_element(by=By.TAG_NAME, value="legend")
         question_id = q.find_element(by=By.TAG_NAME, value="input").get_attribute("name")
+        existing_questions[question_id] = text_box.text
+        
+    # if prompted update the json file
+    if update_questions: 
+        old_questions = load_questions(filename)
+        has_changed = False    
+        for q_id, q_text in existing_questions.items():
+            if q_id not in old_questions or old_questions[q_id] != q_text:
+                old_questions[q_id] = q_text
+                has_changed = True
 
-        if question_id not in existing_questions or existing_questions[question_id] != text_box.text:
-            existing_questions[question_id] = text_box.text
-            has_changed = True
+        if has_changed: save_questions(old_questions, filename)  
 
-    if has_changed: save_questions(existing_questions, filename)  
     return existing_questions
 
 def answer_questions(driver, questions):
@@ -70,8 +75,11 @@ def answer_questions(driver, questions):
             print("Invalid answer, skipping question")
 
 def main():
+    # general parameters
     language = "en"         # language may be en or it
     filename = "questions.json"
+    update_questions = False
+    num_pages = 6
 
     # chrome options
     options = webdriver.ChromeOptions()
@@ -98,12 +106,24 @@ def main():
     except NoSuchElementException:
         print("No cookie session")
 
-    questions = get_questions(driver, filename)
+    # handle answers flow and "next page" button
+    page_counter = 1
+    while True:
+        # TODO move this try to make it cleaner
+        try:
+            # questions-answers flow
+            print(f"Page {page_counter}/{num_pages}")
+            questions = get_questions(driver, update_questions, filename)
+            answer_questions(driver, questions)
 
-    answer_questions(driver, questions)
-    next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")
-    driver.execute_script("arguments[0].click();", next_button)
-    print("Next page")    
+            # go to next page
+            next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")
+            driver.execute_script("arguments[0].click();", next_button)
+            page_counter += 1
+            print("Next page") 
+        except NoSuchElementException:
+            print("Last page reached")
+            break
 
     # end session
     driver.quit()
