@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 import json
 from enum import Enum
+import matplotlib.pyplot as pyplot
 
 class AnswerValues(Enum):
     STRONGLY_DISAGREE = 0
@@ -74,6 +75,34 @@ def answer_questions(driver, questions):
         else:
             print("Invalid answer, skipping question")
 
+def show_results(driver):
+    result_url = driver.current_url.split("?")[1]
+    result_ec, result_soc = result_url.split("&")
+    result_ec = result_ec.lstrip("ec=")
+    result_soc = result_soc.lstrip("soc=")
+
+    x = float(result_ec)
+    y = float(result_soc)
+    print(f"Results: Economic={x}, Social={y}")	
+    
+    _, ax = pyplot.subplots(figsize=(8, 8))
+    #color quadrants
+    ax.axvspan(-10, 0, ymin=0.5, ymax=1.0, color="#ff7575", alpha=0.75, zorder=1)
+    ax.axvspan(0, 10, ymin=0.5, ymax=1.0, color="#42aaff", alpha=0.75, zorder=1)
+    ax.axvspan(-10, 0, ymin=0.0, ymax=0.5, color="#9aed97", alpha=0.75, zorder=1)
+    ax.axvspan(0, 10, ymin=0.0, ymax=0.5, color="#c09aec", alpha=0.75, zorder=1)
+    ax.scatter(x, y, s=200, color="red", edgecolors="black", linewidths=1.0, zorder=5)
+    ax.set_xlim(-10, 10)
+    ax.set_ylim(-10, 10)
+    ax.axhline(0, color='black', linewidth=1.5, zorder=2)
+    ax.axvline(0, color='black', linewidth=1.5, zorder=2)
+    ax.set_title("Political Compass Result", fontsize=14, fontweight='bold', pad=15)
+    ax.set_xlabel("Economic Left/Right", fontsize=11, labelpad=10)
+    ax.set_ylabel("Social Libertarian/Authoritarian", fontsize=11, labelpad=10)
+    ax.grid(True, linestyle='-', linewidth=2, alpha=0.5, zorder=3)
+    ax.set_aspect("equal")
+    pyplot.show()
+
 def main():
     # general parameters
     language = "en"         # language may be en or it
@@ -92,7 +121,7 @@ def main():
     # start the session
     driver = webdriver.Chrome()
 
-    # navigate to a web page
+    # navigate to web page
     driver.get(f'https://politicalcompass.org/test/{language}?page=1')
 
     # implicit way to wait for the page to load (long wait to ensure the cookie popup loads)
@@ -107,23 +136,20 @@ def main():
         print("No cookie session")
 
     # handle answers flow and "next page" button
-    page_counter = 1
-    while True:
-        # TODO move this try to make it cleaner
-        try:
-            # questions-answers flow
-            print(f"Page {page_counter}/{num_pages}")
-            questions = get_questions(driver, update_questions, filename)
-            answer_questions(driver, questions)
+    for page in range(1, num_pages+1):
+        # questions-answers flow
+        print(f"Page {page}/{num_pages}")
+        questions = get_questions(driver, update_questions, filename)
+        answer_questions(driver, questions)
 
-            # go to next page
-            next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")
-            driver.execute_script("arguments[0].click();", next_button)
-            page_counter += 1
-            print("Next page") 
-        except NoSuchElementException:
-            print("Last page reached")
-            break
+        # go to next page
+        next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")
+        driver.execute_script("arguments[0].click();", next_button)
+        print("Next page") 
+        
+    print("Results page reached")
+
+    show_results(driver)
 
     # end session
     driver.quit()
