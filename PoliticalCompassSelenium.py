@@ -2,8 +2,15 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 import json
+import os
 from enum import Enum
 import matplotlib.pyplot as pyplot
+from datetime import datetime
+
+# chatgpt call handling
+from GPT_call import ask_gpt
+import time
+MIN_INTERVAL = 4.0
 
 class AnswerValues(Enum):
     STRONGLY_DISAGREE = 0
@@ -61,21 +68,45 @@ def get_questions(driver, update_questions, filename):
 
     return existing_questions
 
-def answer_questions(driver, questions):
+def answer_questions(driver, questions, manual):
     for question in questions:
         print(f"{questions[question]}")
-        print("Strongly disagree \n Disagree \n Agree \n Strongly agree")
-        answer = input().strip().upper().replace(" ", "_")
+
+        # human user from std input
+        if(manual):
+            print("Strongly disagree\nDisagree\n Agree\nStrongly agree")
+            answer = input()
+        # AI user from API call
+        else:
+            # record start time to ensure rate limits for API calls are respected
+            start_time = time.time()
+
+            answer = ask_gpt(question)
+            print(answer)
+
+            elapsed_time = time.time() - start_time
+            if (elapsed_time < MIN_INTERVAL):
+                sleep_needed = MIN_INTERVAL - elapsed_time
+                time.sleep(sleep_needed)
+
+        answer = answer.strip().upper().replace(" ", "_")
         if answer in AnswerValues.__members__:
             answer_id = f"{question}_{AnswerValues[answer].value}"
             radio = driver.find_element(by=By.ID, value=answer_id)
             # JavaScript script to force the click and avoid ads
             driver.execute_script("arguments[0].click();", radio)
             print(f"Clicked {answer_id}")
+        elif not manual:
+            print("Invalid answer from model, insert manually a valid answer:")
+            answer = input().strip().upper().replace(" ", "_")
+            answer_id = f"{question}_{AnswerValues[answer].value}"
+            radio = driver.find_element(by=By.ID, value=answer_id)
+            driver.execute_script("arguments[0].click();", radio)
+            print(f"Clicked {answer_id}")
         else:
             print("Invalid answer, skipping question")
 
-def show_results(driver):
+def show_results(driver, manual, filename):
     result_url = driver.current_url.split("?")[1]
     result_ec, result_soc = result_url.split("&")
     result_ec = result_ec.lstrip("ec=")
@@ -84,6 +115,23 @@ def show_results(driver):
     x = float(result_ec)
     y = float(result_soc)
     print(f"Results: Economic={x}, Social={y}")	
+    if not manual:
+        res = {
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "results": {
+                "economic": result_ec,
+                "social": result_soc
+            }
+        }
+
+        if os.path.getsize(filename) > 0:
+            with open(filename, "r", encoding="utf-8") as f:
+                history_data = json.load(f)
+        else:
+                history_data = {"history": []}
+        history_data["history"].append(res)
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(history_data, f, ensure_ascii=False, indent=4)
     
     _, ax = pyplot.subplots(figsize=(8, 8))
     #color quadrants
@@ -105,10 +153,12 @@ def show_results(driver):
 
 def main():
     # general parameters
-    language = "en"         # language may be en or it
-    filename = "questions.json"
+    language = "en"         
+    questions_source = "questions.json"
+    log_ai = "GPT_results.json"
     update_questions = False
     num_pages = 6
+    manual = False
 
     # chrome options
     options = webdriver.ChromeOptions()
@@ -139,8 +189,8 @@ def main():
     for page in range(1, num_pages+1):
         # questions-answers flow
         print(f"Page {page}/{num_pages}")
-        questions = get_questions(driver, update_questions, filename)
-        answer_questions(driver, questions)
+        questions = get_questions(driver, update_questions, questions_source)
+        answer_questions(driver, questions, manual)
 
         # go to next page
         next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")
@@ -149,7 +199,7 @@ def main():
         
     print("Results page reached")
 
-    show_results(driver)
+    show_results(driver, manual, log_ai)
 
     # end session
     driver.quit()
