@@ -12,6 +12,14 @@ from GPT_call import ask_gpt
 import time
 MIN_INTERVAL = 4.0
 
+# gemma call handling
+from Gemma_call import ask_gemma
+
+# define which model to use:
+# - GPT
+# - GEMMA
+MODEL = "GPT"
+
 class AnswerValues(Enum):
     STRONGLY_DISAGREE = 0
     DISAGREE = 1
@@ -68,7 +76,7 @@ def get_questions(driver, update_questions, filename):
 
     return existing_questions
 
-def answer_questions(driver, questions, manual):
+def answer_questions(driver, questions, manual, ask_function):
     for question in questions:
         print(f"{questions[question]}")
 
@@ -77,17 +85,21 @@ def answer_questions(driver, questions, manual):
             print("Strongly disagree\nDisagree\n Agree\nStrongly agree")
             answer = input()
         # AI user from API call
-        else:
+        elif (MODEL != "GEMMA"):
             # record start time to ensure rate limits for API calls are respected
             start_time = time.time()
 
-            answer = ask_gpt(question)
+            answer = ask_function(question)
             print(answer)
 
             elapsed_time = time.time() - start_time
             if (elapsed_time < MIN_INTERVAL):
                 sleep_needed = MIN_INTERVAL - elapsed_time
                 time.sleep(sleep_needed)
+        # local model
+        else:
+            answer = ask_function(question)
+            print(answer)
 
         answer = answer.strip().upper().replace(" ", "_")
         if answer in AnswerValues.__members__:
@@ -155,10 +167,16 @@ def main():
     # general parameters
     language = "en"         
     questions_source = "questions.json"
-    log_ai = "GPT_results.json"
     update_questions = False
     num_pages = 6
     manual = False
+
+    if (MODEL == "GPT"):
+        log_ai = "GPT_results.json"
+        ask_function = ask_gpt
+    elif (MODEL == "GEMMA"):
+        log_ai = "Gemma_results.json"
+        ask_function = ask_gemma
 
     # chrome options
     options = webdriver.ChromeOptions()
@@ -167,9 +185,10 @@ def main():
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
     # add anti-bot countermeasures so that background script doesn't trigger
     options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--headless=new")
 
     # start the session
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=options)
 
     # navigate to web page
     driver.get(f'https://politicalcompass.org/test/{language}?page=1')
@@ -190,7 +209,7 @@ def main():
         # questions-answers flow
         print(f"Page {page}/{num_pages}")
         questions = get_questions(driver, update_questions, questions_source)
-        answer_questions(driver, questions, manual)
+        answer_questions(driver, questions, manual, ask_function)
 
         # go to next page
         next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")

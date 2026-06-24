@@ -1,25 +1,39 @@
 {
-  "history": [
-    {
-      "timestamp": "2026-06-10 10:02:46",
-      "results": {
-        "economic": "0.5",
-        "social": "-4.05"
-      }
-    },
-    {
-      "timestamp": "2026-06-11 17:25:31",
-      "results": {
-        "economic": "1.25",
-        "social": "-3.95"
-      }
-    },
-    {
-      "timestamp": "2026-06-11 17:59:29",
-      "results": {
-        "economic": "1.75",
-        "social": "-4.41"
-      }
-    }
-  ]
+    "history": [
+        {
+            "timestamp": "2026-06-10 10:02:46",
+            "results": {
+                "economic": "0.5",
+                "social": "-4.05"
+            }
+        },
+        {
+            "timestamp": "2026-06-11 17:25:31",
+            "results": {
+                "economic": "1.25",
+                "social": "-3.95"
+            }
+        },
+        {
+            "timestamp": "2026-06-11 17:59:29",
+            "results": {
+                "economic": "1.75",
+                "social": "-4.41"
+            }
+        },
+        {
+            "timestamp": "2026-06-23 11:01:30",
+            "results": {
+                "economic": "-0.88",
+                "social": "-3.95"
+            }
+        },
+        {
+            "timestamp": "2026-06-24 15:51:11",
+            "results": {
+                "economic": "0.0",
+                "social": "-5.23"
+            }
+        }
+    ]
 }
