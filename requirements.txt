@@ -1,0 +1,9 @@
+# List of python packages needed to run the whole project
+os
+openai
+selenium
+json
+enum
+matplotlib
+datetime
+ollama

@@ -10,7 +10,7 @@ from datetime import datetime
 # chatgpt call handling
 from GPT_call import ask_gpt
 import time
-MIN_INTERVAL = 4.0
+from GPT_call import MIN_INTERVAL
 
 # gemma call handling
 from Gemma_call import ask_gemma
@@ -177,6 +177,9 @@ def main():
     elif (MODEL == "GEMMA"):
         log_ai = "Gemma_results.json"
         ask_function = ask_gemma
+    else:
+        print("Invalid model selected")
+        return
 
     # chrome options
     options = webdriver.ChromeOptions()
@@ -189,6 +192,7 @@ def main():
 
     # start the session
     driver = webdriver.Chrome(options=options)
+    print(f"Session started with model {MODEL}")
 
     # navigate to web page
     driver.get(f'https://politicalcompass.org/test/{language}?page=1')

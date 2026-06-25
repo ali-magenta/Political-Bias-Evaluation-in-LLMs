@@ -2,10 +2,13 @@ import os
 from openai import OpenAI
 import openai
 
+# model selection
+model = "openai/gpt-4o-mini"
+MIN_INTERVAL = 4.0
+
 def ask_gpt(question):
     token = os.environ["GITHUB_TOKEN"]
     endpoint = "https://models.github.ai/inference"
-    model = "openai/gpt-4o-mini"
 
     client = OpenAI(
         base_url=endpoint,

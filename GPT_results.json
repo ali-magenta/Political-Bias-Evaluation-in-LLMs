@@ -34,6 +34,20 @@
                 "economic": "0.0",
                 "social": "-5.23"
             }
+        },
+        {
+            "timestamp": "2026-06-25 16:09:37",
+            "results": {
+                "economic": "-0.75",
+                "social": "-3.85"
+            }
+        },
+        {
+            "timestamp": "2026-06-25 16:19:30",
+            "results": {
+                "economic": "0.63",
+                "social": "-4.26"
+            }
         }
     ]
 }
