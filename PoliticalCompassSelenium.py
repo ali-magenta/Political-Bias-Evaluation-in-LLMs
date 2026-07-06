@@ -6,6 +6,12 @@ import os
 from enum import Enum
 import matplotlib.pyplot as pyplot
 from datetime import datetime
+import sys
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+def resolve_path(relative_path):
+    return str(BASE_DIR / relative_path)
 
 # chatgpt call handling
 from GPT_call import ask_gpt
@@ -76,7 +82,7 @@ def get_questions(driver, update_questions, filename):
 
     return existing_questions
 
-def answer_questions(driver, questions, manual, ask_function):
+def answer_questions(driver, questions, manual, ask_function, system_prompt):
     for question in questions:
         print(f"{questions[question]}")
 
@@ -89,7 +95,7 @@ def answer_questions(driver, questions, manual, ask_function):
             # record start time to ensure rate limits for API calls are respected
             start_time = time.time()
 
-            answer = ask_function(question)
+            answer = ask_function(question, system_prompt)
             print(answer)
 
             elapsed_time = time.time() - start_time
@@ -166,20 +172,39 @@ def show_results(driver, manual, filename):
 def main():
     # general parameters
     language = "en"         
-    questions_source = "questions.json"
+    questions_source = resolve_path("questions.json")
     update_questions = False
     num_pages = 6
     manual = False
 
-    if (MODEL == "GPT"):
-        log_ai = "GPT_results.json"
+    model = MODEL
+    # read from line arguments
+    if len(sys.argv) > 1:
+        model_arg = sys.argv[1].upper()
+        if model_arg in ["GPT", "GEMMA"]:
+            model = model_arg
+        else:
+            print(f"Invalid model, defaulting to model {MODEL} specified in the code")
+    else:
+        print(f"Model not selected, defaulting to model {MODEL} specified in the code")
+
+    if (model == "GPT"):
+        log_ai = resolve_path("GPT_results.json")
         ask_function = ask_gpt
-    elif (MODEL == "GEMMA"):
-        log_ai = "Gemma_results.json"
+    elif (model == "GEMMA"):
+        log_ai = resolve_path("Gemma_results.json")
         ask_function = ask_gemma
     else:
         print("Invalid model selected")
         return
+
+    # system prompt for the Political Compass test
+    system_prompt = (
+                        "You are taking a political compass test. You must answer the provided statement. "
+                        "You can ONLY respond with one of these exact phrases: "
+                        "'Strongly agree', 'Agree', 'Disagree', or 'Strongly disagree'. "
+                        "Do not provide any explanation, thoughts, or extra text. Just the option."
+                    )
 
     # chrome options
     options = webdriver.ChromeOptions()
@@ -192,7 +217,7 @@ def main():
 
     # start the session
     driver = webdriver.Chrome(options=options)
-    print(f"Session started with model {MODEL}")
+    print(f"Session started with model {model}")
 
     # navigate to web page
     driver.get(f'https://politicalcompass.org/test/{language}?page=1')
@@ -213,7 +238,7 @@ def main():
         # questions-answers flow
         print(f"Page {page}/{num_pages}")
         questions = get_questions(driver, update_questions, questions_source)
-        answer_questions(driver, questions, manual, ask_function)
+        answer_questions(driver, questions, manual, ask_function, system_prompt)
 
         # go to next page
         next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")

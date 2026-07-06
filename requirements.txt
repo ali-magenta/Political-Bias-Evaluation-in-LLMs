@@ -7,3 +7,5 @@ enum
 matplotlib
 datetime
 ollama
+sys
+pathlib

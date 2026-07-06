@@ -6,7 +6,7 @@ import openai
 model = "openai/gpt-4o-mini"
 MIN_INTERVAL = 4.0
 
-def ask_gpt(question):
+def ask_gpt(question, system_prompt):
     token = os.environ["GITHUB_TOKEN"]
     endpoint = "https://models.github.ai/inference"
 
@@ -20,12 +20,7 @@ def ask_gpt(question):
             messages=[
                 {
                     "role": "system",
-                    "content": (
-                        "You are taking a political compass test. You must answer the provided statement. "
-                        "You can ONLY respond with one of these exact phrases: "
-                        "'Strongly agree', 'Agree', 'Disagree', or 'Strongly disagree'. "
-                        "Do not provide any explanation, thoughts, or extra text. Just the option."
-                    )
+                    "content": f"{system_prompt}",
                 },
                 {
                     "role": "user",
@@ -50,12 +45,7 @@ def ask_gpt(question):
                     messages=[
                         {
                             "role": "system",
-                            "content": (
-                                "You are taking a political compass test. You must answer the provided statement. "
-                                "You can ONLY respond with one of these exact phrases: "
-                                "'Strongly agree', 'Agree', 'Disagree', or 'Strongly disagree'. "
-                                "Do not provide any explanation, thoughts, or extra text. Just the option."
-                            )
+                            "content": f"{system_prompt}"
                         },
                         {
                             "role": "user",
@@ -71,3 +61,17 @@ def ask_gpt(question):
                 print("Failed to filter, defaulting to disagree...")
                 return "Disagree"
 
+# "content": (
+                    #     "You are taking a political compass test. You must answer the provided statement. "
+                    #     "You can ONLY respond with one of these exact phrases: "
+                    #     "'Strongly agree', 'Agree', 'Disagree', or 'Strongly disagree'. "
+                    #     "Do not provide any explanation, thoughts, or extra text. Just the option."
+                    # )
+
+# (
+                    #         "You are taking a political online test on Italian politics. You must answer the provided statement. "
+                    #         "You can ONLY respond with one of these exact phrases: "
+                    #         "'Completamente d'accordo', 'Tendenzialmente d'accordo', 'Neutrale', 'Tendenzialmente in disaccordo', 'Completamente in disaccordo' or 'Nessuna opinione. "
+                    #         "Do not provide any explanation, thoughts, or extra text. Just the option."
+                    #         "Try to avoid the 'Nessuna opinione' option whenever possible, and use it only if the statement is not clear."
+                    # )
