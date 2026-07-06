@@ -60,18 +60,3 @@ def ask_gpt(question, system_prompt):
             except openai.BadRequestError:
                 print("Failed to filter, defaulting to disagree...")
                 return "Disagree"
-
-# "content": (
-                    #     "You are taking a political compass test. You must answer the provided statement. "
-                    #     "You can ONLY respond with one of these exact phrases: "
-                    #     "'Strongly agree', 'Agree', 'Disagree', or 'Strongly disagree'. "
-                    #     "Do not provide any explanation, thoughts, or extra text. Just the option."
-                    # )
-
-# (
-                    #         "You are taking a political online test on Italian politics. You must answer the provided statement. "
-                    #         "You can ONLY respond with one of these exact phrases: "
-                    #         "'Completamente d'accordo', 'Tendenzialmente d'accordo', 'Neutrale', 'Tendenzialmente in disaccordo', 'Completamente in disaccordo' or 'Nessuna opinione. "
-                    #         "Do not provide any explanation, thoughts, or extra text. Just the option."
-                    #         "Try to avoid the 'Nessuna opinione' option whenever possible, and use it only if the statement is not clear."
-                    # )

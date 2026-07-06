@@ -41,7 +41,9 @@ GPT models are called via GitHub Models APIs, so to use them you need to create 
 
 `PoliticalCompassSelenium.py` is a script that performs the Political Compass test through the Selenium web automation tool. The script calls the functions in the model calling scripts and uses the answers to iterate through the test statements. At the end the result is shown with a graph similar to the official one obtained in the website and it is saved in a JSON file that keeps the history of all tests taken.
 
-To choose which model to use during the test, you can pass the name of the model as a line argument or you can modify the `MODEL` variable at the top of the script. As of now, you can choose the following options:
+`NavigatorePoliticoSelenium.py` is a script that performs the Navigatore Politico test through the Selenium web automation tool. The script calls the functions in the model calling scripts and uses the answers to iterate through the test statements. At the end the result is shown on the terminal and it is saved in a JSON file that keeps the history of all tests taken.
+
+To choose which model to use during both tests, you can pass the name of the model as a line argument or you can modify the `MODEL` variable at the top of the script. As of now, you can choose the following options:
 
 - `GPT` for GPT models
 - `GEMMA` for Gemma local models

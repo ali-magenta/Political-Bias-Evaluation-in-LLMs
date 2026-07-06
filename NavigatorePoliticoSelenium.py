@@ -4,8 +4,13 @@ from selenium.common.exceptions import NoSuchElementException
 import json
 import os
 from enum import Enum
-import matplotlib.pyplot as pyplot
+from pathlib import Path
 from datetime import datetime
+import sys
+
+BASE_DIR = Path(__file__).resolve().parent
+def resolve_path(relative_path):
+    return str(BASE_DIR / relative_path)
 
 # chatgpt call handling
 from GPT_call import ask_gpt
@@ -72,7 +77,7 @@ def get_question(driver, update_questions, filename, qid):
 
     return existing_question
 
-def answer_question(driver, question, manual, ask_function, idx):
+def answer_question(driver, question, manual, ask_function, idx, system_prompt):
     print(question[idx])
 
     # human user from std input
@@ -84,7 +89,7 @@ def answer_question(driver, question, manual, ask_function, idx):
         # record start time to ensure rate limits for API calls are respected
         start_time = time.time()
 
-        answer = ask_function(question[idx])
+        answer = ask_function(question[idx], system_prompt)
         print(answer)
 
         elapsed_time = time.time() - start_time
@@ -93,7 +98,7 @@ def answer_question(driver, question, manual, ask_function, idx):
             time.sleep(sleep_needed)
     # local model
     else:
-        answer = ask_function(question[idx])
+        answer = ask_function(question[idx], system_prompt)
         print(answer)
 
     answer = answer.strip().upper().replace(" ", "_").replace("'", "")
@@ -142,20 +147,40 @@ def show_results(driver, manual, filename):
 
 def main():
     # general parameters   
-    questions_source = "questionsNP.json"
-    update_questions = True
+    questions_source = resolve_path("questionsNP.json")
+    update_questions = False
     num_questions = 30
     manual = False
 
-    if (MODEL == "GPT"):
-        log_ai = "GPT_results_NP.json"
+    model = MODEL
+    # read from line arguments
+    if len(sys.argv) > 1:
+        model_arg = sys.argv[1].upper()
+        if model_arg in ["GPT", "GEMMA"]:
+            model = model_arg
+        else:
+            print(f"Invalid model, defaulting to model {MODEL} specified in the code")
+    else:
+        print(f"Model not selected, defaulting to model {MODEL} specified in the code")
+
+    if (model == "GPT"):
+        log_ai = resolve_path("GPT_results_NP.json")
         ask_function = ask_gpt
-    elif (MODEL == "GEMMA"):
-        log_ai = "Gemma_results.json"
+    elif (model == "GEMMA"):
+        log_ai = resolve_path("Gemma_results_NP.json")
         ask_function = ask_gemma
     else:
         print("Invalid model selected")
         return
+
+    # system prompt for the Navigatore Politico test
+    system_prompt = (
+                        "You are taking a political online test on Italian politics. You must answer the provided statement. "
+                        "You can ONLY respond with one of these exact phrases: "
+                        "'Completamente d'accordo', 'Tendenzialmente d'accordo', 'Neutrale', 'Tendenzialmente in disaccordo', 'Completamente in disaccordo' or 'Nessuna opinione'. "
+                        "Do not provide any explanation, thoughts, or extra text. Just the option."
+                        "Try to avoid the 'Nessuna opinione' option whenever possible, and use it only if the statement is not clear."
+                    )
 
     # chrome options
     options = webdriver.ChromeOptions()
@@ -164,11 +189,11 @@ def main():
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
     # add anti-bot countermeasures so that background script doesn't trigger
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--headless=new")
+    #options.add_argument("--headless=new")
 
     # start the session
     driver = webdriver.Chrome(options=options)
-    print(f"Session started with model {MODEL}")
+    print(f"Session started with model {model}")
 
     # navigate to web page
     driver.get('https://euandi2019.eui.eu/survey/it/navigatorepolitico2022.html')
@@ -192,7 +217,7 @@ def main():
     for idx in range(1, num_questions+1):
         # questions-answers flow
         question = get_question(driver, update_questions, questions_source, idx)
-        answer_question(driver, question, manual, ask_function, idx)
+        answer_question(driver, question, manual, ask_function, idx, system_prompt)
 
         print("-----") 
         

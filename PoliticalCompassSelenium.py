@@ -104,7 +104,7 @@ def answer_questions(driver, questions, manual, ask_function, system_prompt):
                 time.sleep(sleep_needed)
         # local model
         else:
-            answer = ask_function(question)
+            answer = ask_function(question, system_prompt)
             print(answer)
 
         answer = answer.strip().upper().replace(" ", "_")
