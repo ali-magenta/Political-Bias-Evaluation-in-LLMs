@@ -158,7 +158,7 @@ def show_results(driver, manual, filename):
 
 def main():
     # general parameters   
-    questions_source = resolve_path("questionsNP.json")
+    questions_source = resolve_path("QuestionLists/questionsNP.json")
     update_questions = False
     num_questions = 30
     manual = False
@@ -175,13 +175,13 @@ def main():
         print(f"Model not selected, defaulting to model {MODEL} specified in the code")
 
     if (model == "GPT"):
-        log_ai = resolve_path("GPT_results_NP.json")
+        log_ai = resolve_path("Results/GPT_results_NP.json")
         ask_function = ask_gpt
-        previous_session_log = resolve_path("session_NP_GPT.json")
+        previous_session_log = resolve_path("Sessions/session_NP_GPT.json")
     elif (model == "GEMMA"):
-        log_ai = resolve_path("Gemma_results_NP.json")
+        log_ai = resolve_path("Results/Gemma_results_NP.json")
         ask_function = ask_gemma
-        previous_session_log = resolve_path("session_NP_GEMMA.json")
+        previous_session_log = resolve_path("Sessions/session_NP_GEMMA.json")
     else:
         print("Invalid model selected")
         return
