@@ -16,6 +16,7 @@ def resolve_path(relative_path):
 from GPT_call import ask_gpt
 import time
 from GPT_call import MIN_INTERVAL
+import openai
 
 # gemma call handling
 from Gemma_call import ask_gemma
@@ -33,14 +34,18 @@ class AnswerValues(Enum):
     COMPLETAMENTE_IN_DISACCORDO = 4
     NESSUNA_OPINIONE = 5
 
-def save_questions(questions, filename):
+def save_questions(questions, filename, saving_session=False):
     '''
-    Save questions in a JSON file if some questions are not present or have to be updated.
-    '''
+    1: Save questions in a JSON file if some questions are not present or have to be updated.
+    2: Save log of the current session    '''
 
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(questions, f, ensure_ascii=False, indent=4)
-    print("Question list was updated")
+    
+    if saving_session:
+        print("Session saved")
+    else:
+        print("Question list was updated")
 
 def load_questions(filename):
     '''
@@ -77,29 +82,33 @@ def get_question(driver, update_questions, filename, qid):
 
     return existing_question
 
-def answer_question(driver, question, manual, ask_function, idx, system_prompt):
+def answer_question(driver, question, manual, ask_function, idx, system_prompt, session):
     print(question[idx])
 
-    # human user from std input
-    if(manual):
-        print("Completamente d'accordo\nTendenzialmente d'accordo\nNeutrale\nTendenzialmente in disaccordo\nCompletamente in disaccordo\nNessuna opinione")
-        answer = input()
-    # AI user from API call
-    elif (MODEL != "GEMMA"):
-        # record start time to ensure rate limits for API calls are respected
-        start_time = time.time()
-
-        answer = ask_function(question[idx], system_prompt)
-        print(answer)
-
-        elapsed_time = time.time() - start_time
-        if (elapsed_time < MIN_INTERVAL):
-            sleep_needed = MIN_INTERVAL - elapsed_time
-            time.sleep(sleep_needed)
-    # local model
+    if question[idx] in session:
+        answer = session[question[idx]]
+        print(f"From previous session: {answer}")
     else:
-        answer = ask_function(question[idx], system_prompt)
-        print(answer)
+        # human user from std input
+        if(manual):
+            print("Completamente d'accordo\nTendenzialmente d'accordo\nNeutrale\nTendenzialmente in disaccordo\nCompletamente in disaccordo\nNessuna opinione")
+            answer = input()
+        # AI user from API call
+        elif (MODEL != "GEMMA"):
+            # record start time to ensure rate limits for API calls are respected
+            start_time = time.time()
+
+            answer = ask_function(question[idx], system_prompt)
+            print(answer)
+
+            elapsed_time = time.time() - start_time
+            if (elapsed_time < MIN_INTERVAL):
+                sleep_needed = MIN_INTERVAL - elapsed_time
+                time.sleep(sleep_needed)
+        # local model
+        else:
+            answer = ask_function(question[idx], system_prompt)
+            print(answer)
 
     answer = answer.strip().upper().replace(" ", "_").replace("'", "")
     if answer in AnswerValues.__members__:
@@ -117,6 +126,8 @@ def answer_question(driver, question, manual, ask_function, idx, system_prompt):
         print(f"Clicked {answer}")
     else:
         print("Invalid answer, skipping question")
+
+    session[question[idx]] = answer
 
 def show_results(driver, manual, filename):
     top_row = driver.find_element(By.CSS_SELECTOR, "div.right_bar_row")
@@ -166,9 +177,11 @@ def main():
     if (model == "GPT"):
         log_ai = resolve_path("GPT_results_NP.json")
         ask_function = ask_gpt
+        previous_session_log = resolve_path("session_NP_GPT.json")
     elif (model == "GEMMA"):
         log_ai = resolve_path("Gemma_results_NP.json")
         ask_function = ask_gemma
+        previous_session_log = resolve_path("session_NP_GEMMA.json")
     else:
         print("Invalid model selected")
         return
@@ -209,35 +222,57 @@ def main():
     except NoSuchElementException:
         print("No cookie session")
 
+    # handle unfinished old session
+    session = load_questions(previous_session_log)
+    if session:
+        print("Previous unfinished session found, the new session will continue from the last answered question")
+
     # start quiz
     start_button = driver.find_element(By.CSS_SELECTOR, "div.testo.titolo p.btn a")
     start_button.click()
 
     # handle answers flow and "next page" button
     for idx in range(1, num_questions+1):
-        # questions-answers flow
-        question = get_question(driver, update_questions, questions_source, idx)
-        answer_question(driver, question, manual, ask_function, idx, system_prompt)
-
-        print("-----") 
+        try:
+            # questions-answers flow
+            question = get_question(driver, update_questions, questions_source, idx)
+            answer_question(driver, question, manual, ask_function, idx, system_prompt, session)
+            print("-----") 
+        except openai.RateLimitError:
+            print("Rate limit exceeded, saving current session and exiting...")
+            save_questions(session, previous_session_log, True)
+            break
+        except KeyboardInterrupt:
+            print("Keyboard interrupt, do you want to save the current session? y/n")
+            ans = input()
+            if (ans == "y"):
+                save_questions(session, previous_session_log, True)
+            driver.quit()
+            try:
+                sys.exit(130)
+            except SystemExit:
+                os._exit(130)
         
-    print("Results page reached")
+    if idx == num_questions:
+        print("Results page reached")
 
-    skip_pref_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
-    driver.execute_script("arguments[0].click();", skip_pref_button)
-    driver.implicitly_wait(2)
-    skip_party_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
-    driver.execute_script("arguments[0].click();", skip_party_button)
-    driver.implicitly_wait(2)
-    skip_data_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
-    driver.execute_script("arguments[0].click();", skip_data_button)
-    driver.implicitly_wait(2)
-    skip_mail_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
-    driver.execute_script("arguments[0].click();", skip_mail_button)
+        skip_pref_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
+        driver.execute_script("arguments[0].click();", skip_pref_button)
+        driver.implicitly_wait(2)
+        skip_party_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
+        driver.execute_script("arguments[0].click();", skip_party_button)
+        driver.implicitly_wait(2)
+        skip_data_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
+        driver.execute_script("arguments[0].click();", skip_data_button)
+        driver.implicitly_wait(2)
+        skip_mail_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
+        driver.execute_script("arguments[0].click();", skip_mail_button)
 
-    print("Waiting for results...")
-    driver.implicitly_wait(8)
-    show_results(driver, manual, log_ai)
+        print("Waiting for results...")
+        driver.implicitly_wait(8)
+        show_results(driver, manual, log_ai)
+        wipe_session = {}
+        save_questions(wipe_session, previous_session_log, True)
 
     # end session
     driver.quit()

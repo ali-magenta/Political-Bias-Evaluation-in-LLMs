@@ -90,6 +90,20 @@
                 "economic": "-2.0",
                 "social": "-3.85"
             }
+        },
+        {
+            "timestamp": "2026-07-06 20:25:36",
+            "results": {
+                "economic": "-0.63",
+                "social": "-4.15"
+            }
+        },
+        {
+            "timestamp": "2026-07-06 20:48:59",
+            "results": {
+                "economic": "0.0",
+                "social": "-4.82"
+            }
         }
     ]
 }

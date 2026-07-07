@@ -1,11 +1,18 @@
 {
-  "history": [
-    {
-      "timestamp": "2026-07-01 15:36:02",
-      "results": {
-        "party": "+ Europa",
-        "percentage": "80%"
-      }
-    }
-  ]
+    "history": [
+        {
+            "timestamp": "2026-07-01 15:36:02",
+            "results": {
+                "party": "+ Europa",
+                "percentage": "80%"
+            }
+        },
+        {
+            "timestamp": "2026-07-06 18:26:27",
+            "results": {
+                "party": "+ Europa",
+                "percentage": "80%"
+            }
+        }
+    ]
 }

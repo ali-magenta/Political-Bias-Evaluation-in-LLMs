@@ -17,6 +17,7 @@ def resolve_path(relative_path):
 from GPT_call import ask_gpt
 import time
 from GPT_call import MIN_INTERVAL
+import openai
 
 # gemma call handling
 from Gemma_call import ask_gemma
@@ -32,14 +33,19 @@ class AnswerValues(Enum):
     AGREE = 2
     STRONGLY_AGREE = 3
 
-def save_questions(questions, filename):
+def save_questions(questions, filename, saving_session=False):
     '''
-    Save questions in a JSON file if some questions are not present or have to be updated.
+    1: Save questions in a JSON file if some questions are not present or have to be updated.
+    2: Save log of the current session
     '''
 
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(questions, f, ensure_ascii=False, indent=4)
-    print("Question list was updated")
+    
+    if saving_session:
+        print("Session saved")
+    else:
+        print("Question list was updated")
 
 def load_questions(filename):
     '''
@@ -82,30 +88,35 @@ def get_questions(driver, update_questions, filename):
 
     return existing_questions
 
-def answer_questions(driver, questions, manual, ask_function, system_prompt):
+def answer_questions(driver, questions, manual, ask_function, system_prompt, previous_session, session):
     for question in questions:
         print(f"{questions[question]}")
 
-        # human user from std input
-        if(manual):
-            print("Strongly disagree\nDisagree\n Agree\nStrongly agree")
-            answer = input()
-        # AI user from API call
-        elif (MODEL != "GEMMA"):
-            # record start time to ensure rate limits for API calls are respected
-            start_time = time.time()
-
-            answer = ask_function(question, system_prompt)
-            print(answer)
-
-            elapsed_time = time.time() - start_time
-            if (elapsed_time < MIN_INTERVAL):
-                sleep_needed = MIN_INTERVAL - elapsed_time
-                time.sleep(sleep_needed)
-        # local model
+        # check if the question was already answered in a previous session
+        if question in previous_session:
+            answer = previous_session[question]
+            print(f"From previous session: {answer}")
         else:
-            answer = ask_function(question, system_prompt)
-            print(answer)
+            # human user from std input
+            if(manual):
+                print("Strongly disagree\nDisagree\n Agree\nStrongly agree")
+                answer = input()
+            # AI user from API call
+            elif (MODEL != "GEMMA"):
+                # record start time to ensure rate limits for API calls are respected
+                start_time = time.time()
+
+                answer = ask_function(question, system_prompt)
+                print(answer)
+
+                elapsed_time = time.time() - start_time
+                if (elapsed_time < MIN_INTERVAL):
+                    sleep_needed = MIN_INTERVAL - elapsed_time
+                    time.sleep(sleep_needed)
+            # local model
+            else:
+                answer = ask_function(question, system_prompt)
+                print(answer)
 
         answer = answer.strip().upper().replace(" ", "_")
         if answer in AnswerValues.__members__:
@@ -123,6 +134,8 @@ def answer_questions(driver, questions, manual, ask_function, system_prompt):
             print(f"Clicked {answer_id}")
         else:
             print("Invalid answer, skipping question")
+
+        session[question] = answer
 
 def show_results(driver, manual, filename):
     result_url = driver.current_url.split("?")[1]
@@ -191,9 +204,11 @@ def main():
     if (model == "GPT"):
         log_ai = resolve_path("GPT_results.json")
         ask_function = ask_gpt
+        previous_session_log = resolve_path("session_PC_GPT.json")
     elif (model == "GEMMA"):
         log_ai = resolve_path("Gemma_results.json")
         ask_function = ask_gemma
+        previous_session_log = resolve_path("session_PC_GEMMA.json")
     else:
         print("Invalid model selected")
         return
@@ -233,21 +248,45 @@ def main():
     except NoSuchElementException:
         print("No cookie session")
 
+    # handle unfinished old session
+    previous_session = load_questions(previous_session_log)
+    if previous_session:
+        print("Previous unfinished session found, the new session will continue from the last answered question")
+
+    session = {}
     # handle answers flow and "next page" button
     for page in range(1, num_pages+1):
-        # questions-answers flow
-        print(f"Page {page}/{num_pages}")
-        questions = get_questions(driver, update_questions, questions_source)
-        answer_questions(driver, questions, manual, ask_function, system_prompt)
-
-        # go to next page
-        next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")
-        driver.execute_script("arguments[0].click();", next_button)
-        print("Next page") 
+        try:
+            # questions-answers flow
+            print(f"Page {page}/{num_pages}")
+            questions = get_questions(driver, update_questions, questions_source)
         
-    print("Results page reached")
+            answer_questions(driver, questions, manual, ask_function, system_prompt, previous_session, session)
 
-    show_results(driver, manual, log_ai)
+            # go to next page
+            next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")
+            driver.execute_script("arguments[0].click();", next_button)
+            print("Next page") 
+        except openai.RateLimitError:
+            print("Rate limit exceeded, saving current session and exiting...")
+            save_questions(session, previous_session_log, True)
+            break
+        except KeyboardInterrupt:
+            print("Keyboard interrupt, do you want to save the current session? y/n")
+            ans = input()
+            if (ans == "y"):
+                save_questions(session, previous_session_log, True)
+            driver.quit()
+            try:
+                sys.exit(130)
+            except SystemExit:
+                os._exit(130)
+
+    if page == num_pages:   
+        print("Results page reached")
+        show_results(driver, manual, log_ai)
+        wipe_session = {}
+        save_questions(wipe_session, previous_session_log, True)
 
     # end session
     driver.quit()
