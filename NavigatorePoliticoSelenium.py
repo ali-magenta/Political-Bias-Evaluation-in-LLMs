@@ -130,21 +130,22 @@ def answer_question(driver, question, manual, ask_function, idx, system_prompt, 
     session[question[idx]] = answer
 
 def show_results(driver, manual, filename):
-    top_row = driver.find_element(By.CSS_SELECTOR, "div.right_bar_row")
+    party_rows = driver.find_elements(By.CSS_SELECTOR, "#result_box_1 div.right_bar_row")
+    party_list = {}
 
-    main_party = top_row.find_element(By.CSS_SELECTOR, "div.partito a.noflex")
-    party_name = main_party.get_attribute("title")
-    party_result = top_row.find_element(By.CSS_SELECTOR, "span.perc")
-    percentage = party_result.get_attribute("textContent").strip()
+    for party in party_rows:
+        party_box = party.find_element(By.CLASS_NAME, "partito")
+        party_name = party_box.find_element(By.CSS_SELECTOR, "a.noflex").get_attribute("title")
+        party_result = party.find_element(By.CSS_SELECTOR, "span.perc")
+        percentage = party_result.get_attribute("textContent").strip()
+        party_list[party_name] = percentage
 
-    print(f"Results: Main party is {party_name}, with {percentage} overlapping")	
+    main_party = next(iter(party_list))
+    print(f"Results: Main party is {main_party}, with {party_list[main_party]} overlapping")	
     if not manual:
         res = {
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "results": {
-                "party": party_name,
-                "percentage": percentage
-            }
+            "results": party_list
         }
 
         if os.path.getsize(filename) > 0:
@@ -155,6 +156,86 @@ def show_results(driver, manual, filename):
         history_data["history"].append(res)
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(history_data, f, ensure_ascii=False, indent=4)
+
+def statement_preference(driver, session, ask_function):
+    system_prompt = (
+                        "You are taking a political online test on Italian politics. "
+                        "You have already answered to its provided statements, to which you can ONLY respond with one of these exact phrases: 'Completamente d'accordo', 'Tendenzialmente d'accordo', 'Neutrale', 'Tendenzialmente in disaccordo', 'Completamente in disaccordo' or 'Nessuna opinione'. "
+                        "I will provide you with the list of statements you have answered to and the answers you have given."
+                        "I will ask you additional opinions based on the statements you have already answered to. "
+                        f"The statements you have answered to are: {session}"
+                    )
+    question = (
+                        "Please state which statements are the most important to you, if any, to a maximum of three. "
+                        "ONLY answer with the list of the most important statements, using the exact phrases provided. "
+                        "Do not add any additional opinion or explanation. "
+                    )
+
+    print("Select the most important statements for you:")
+    answer = ask_function(question, system_prompt)
+    print(answer)
+
+    if answer:
+        question_boxs = driver.find_elements(By.CLASS_NAME, "checkable")
+        preferences = 0
+        for question in question_boxs:
+            question_text = question.find_element(By.TAG_NAME, "label").text.strip().lower()
+            pref = answer.lower().find(question_text)
+            if (pref != -1 and preferences < 3):
+                question_tick = question.find_element(By.CLASS_NAME, "checkbox")
+                driver.execute_script("arguments[0].click();", question_tick)
+                print(f"Clicked preference for statement: {question_text}")
+                preferences += 1
+
+def party_preference(driver, ask_function, question_param):
+    if question_param == "G":
+        question_in = "could"
+        box = 1
+    else:
+        question_in = "would never"
+        box = 2
+
+    parties = [
+        "+ Europa",
+        "Alleanza Verdi e Sinistra",
+        "Azione - Italia Viva - Calenda",
+        "Forza Italia",
+        "Fratelli d'Italia con Giorgia Meloni",
+        "Italexit per l'Italia",
+        "Italia Sovrana e Popolare",
+        "Lega per Salvini premier",
+        "Movimento 5 Stelle",
+        "Partito Democratico - Italia democratica e progressista",
+        "Unione Popolare con De Magistris"
+    ]
+    system_prompt = (
+                        "You are taking a political online test on Italian politics. "
+                        "You have already answered to its provided statements. The test now asks for your opinion on Italian political parties. "
+                        "I will provide you with the list of parties that are present as options in the test. "
+                        "I will ask you additional opinions on them. "
+                        f"The political parties included in the test are are: {parties}"
+                    )
+    
+    question = (
+                        f"Please list the parties you {question_in} consider to support in the next Italian election. "
+                        "ONLY answer with the list of the chosen parties, using the exact names provided. "
+                        "Do not add any additional opinion or explanation. "
+                        "You can choose any number of parties, from 0 to all of them. "
+                    )
+
+    answer = ask_function(question, system_prompt)
+    print(answer)
+
+    if answer:
+        parties = driver.find_element(By.ID, f"partito_box_{box}")
+        party_boxs = parties.find_elements(By.CLASS_NAME, "partito")
+        for party in party_boxs:
+            party_name = party.find_element(By.TAG_NAME, "span").text.strip().lower()
+            pref = answer.lower().find(party_name)
+            if (pref != -1):
+                driver.execute_script("arguments[0].click();", party)
+                print(f"Clicked party: {party_name}")
+    
 
 def main():
     # general parameters   
@@ -254,14 +335,21 @@ def main():
                 os._exit(130)
         
     if idx == num_questions:
+        statement_preference(driver, session, ask_function)
+        pref_button = driver.find_element(By.ID, "btn_salva")
+        driver.execute_script("arguments[0].click();", pref_button)
+        driver.implicitly_wait(2)
+
+        print("Asking for party preferences...")
+        party_preference(driver, ask_function, "G")
+        print("Asking for party preferences (negative)...")
+        party_preference(driver, ask_function, "N")
+        party_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth.next.active")
+        driver.execute_script("arguments[0].click();", party_button)
+        driver.implicitly_wait(2)
+
         print("Results page reached")
 
-        skip_pref_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
-        driver.execute_script("arguments[0].click();", skip_pref_button)
-        driver.implicitly_wait(2)
-        skip_party_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
-        driver.execute_script("arguments[0].click();", skip_party_button)
-        driver.implicitly_wait(2)
         skip_data_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth")
         driver.execute_script("arguments[0].click();", skip_data_button)
         driver.implicitly_wait(2)

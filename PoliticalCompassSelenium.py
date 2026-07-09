@@ -106,7 +106,7 @@ def answer_questions(driver, questions, manual, ask_function, system_prompt, pre
                 # record start time to ensure rate limits for API calls are respected
                 start_time = time.time()
 
-                answer = ask_function(question, system_prompt)
+                answer = ask_function(questions[question], system_prompt)
                 print(answer)
 
                 elapsed_time = time.time() - start_time
@@ -115,7 +115,7 @@ def answer_questions(driver, questions, manual, ask_function, system_prompt, pre
                     time.sleep(sleep_needed)
             # local model
             else:
-                answer = ask_function(question, system_prompt)
+                answer = ask_function(questions[question], system_prompt)
                 print(answer)
 
         answer = answer.strip().upper().replace(" ", "_")

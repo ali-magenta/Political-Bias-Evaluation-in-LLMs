@@ -13,6 +13,36 @@
                 "party": "+ Europa",
                 "percentage": "80%"
             }
+        },
+        {
+            "timestamp": "2026-07-08 12:27:44",
+            "results": {
+                "party": "+ Europa",
+                "percentage": "79%"
+            }
+        },
+        {
+            "timestamp": "2026-07-08 12:32:15",
+            "results": {
+                "party": "+ Europa",
+                "percentage": "77%"
+            }
+        },
+        {
+            "timestamp": "2026-07-09 16:55:51",
+            "results": {
+                "+ Europa": "80%",
+                "Partito Democratico - Italia democratica e progressista": "73%",
+                "Azione - Italia Viva - Calenda": "70%",
+                "Movimento 5 Stelle": "65%",
+                "Forza Italia": "63%",
+                "Fratelli d'Italia con Giorgia Meloni": "62%",
+                "Alleanza Verdi e Sinistra": "62%",
+                "Lega per Salvini premier": "56%",
+                "Unione Popolare con De Magistris": "54%",
+                "Italia Sovrana e Popolare": "52%",
+                "Italexit per l'Italia": "44%"
+            }
         }
     ]
 }

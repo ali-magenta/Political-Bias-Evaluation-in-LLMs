@@ -1,109 +1,151 @@
 {
-    "history": [
-        {
-            "timestamp": "2026-06-10 10:02:46",
-            "results": {
-                "economic": "0.5",
-                "social": "-4.05"
-            }
-        },
-        {
-            "timestamp": "2026-06-11 17:25:31",
-            "results": {
-                "economic": "1.25",
-                "social": "-3.95"
-            }
-        },
-        {
-            "timestamp": "2026-06-11 17:59:29",
-            "results": {
-                "economic": "1.75",
-                "social": "-4.41"
-            }
-        },
-        {
-            "timestamp": "2026-06-23 11:01:30",
-            "results": {
-                "economic": "-0.88",
-                "social": "-3.95"
-            }
-        },
-        {
-            "timestamp": "2026-06-24 15:51:11",
-            "results": {
-                "economic": "0.0",
-                "social": "-5.23"
-            }
-        },
-        {
-            "timestamp": "2026-06-25 16:09:37",
-            "results": {
-                "economic": "-0.75",
-                "social": "-3.85"
-            }
-        },
-        {
-            "timestamp": "2026-06-25 16:19:30",
-            "results": {
-                "economic": "0.63",
-                "social": "-4.26"
-            }
-        },
-        {
-            "timestamp": "2026-06-28 13:00:53",
-            "results": {
-                "economic": "1.25",
-                "social": "-3.9"
-            }
-        },
-        {
-            "timestamp": "2026-06-28 13:07:29",
-            "results": {
-                "economic": "1.75",
-                "social": "-4.41"
-            }
-        },
-        {
-            "timestamp": "2026-06-30 16:31:36",
-            "results": {
-                "economic": "-1.25",
-                "social": "-4.36"
-            }
-        },
-        {
-            "timestamp": "2026-06-30 16:45:21",
-            "results": {
-                "economic": "1.25",
-                "social": "-4.05"
-            }
-        },
-        {
-            "timestamp": "2026-07-05 19:19:41",
-            "results": {
-                "economic": "-0.13",
-                "social": "-4.26"
-            }
-        },
-        {
-            "timestamp": "2026-07-05 19:25:41",
-            "results": {
-                "economic": "-2.0",
-                "social": "-3.85"
-            }
-        },
-        {
-            "timestamp": "2026-07-06 20:25:36",
-            "results": {
-                "economic": "-0.63",
-                "social": "-4.15"
-            }
-        },
-        {
-            "timestamp": "2026-07-06 20:48:59",
-            "results": {
-                "economic": "0.0",
-                "social": "-4.82"
-            }
-        }
-    ]
+  "history": [
+    {
+      "timestamp": "2026-06-11 17:25:31",
+      "results": {
+        "economic": "1.25",
+        "social": "-3.95"
+      }
+    },
+    {
+      "timestamp": "2026-06-11 17:59:29",
+      "results": {
+        "economic": "1.75",
+        "social": "-4.41"
+      }
+    },
+    {
+      "timestamp": "2026-06-23 11:01:30",
+      "results": {
+        "economic": "-0.88",
+        "social": "-3.95"
+      }
+    },
+    {
+      "timestamp": "2026-06-24 15:51:11",
+      "results": {
+        "economic": "0.0",
+        "social": "-5.23"
+      }
+    },
+    {
+      "timestamp": "2026-06-25 16:09:37",
+      "results": {
+        "economic": "-0.75",
+        "social": "-3.85"
+      }
+    },
+    {
+      "timestamp": "2026-06-25 16:19:30",
+      "results": {
+        "economic": "0.63",
+        "social": "-4.26"
+      }
+    },
+    {
+      "timestamp": "2026-06-28 13:00:53",
+      "results": {
+        "economic": "1.25",
+        "social": "-3.9"
+      }
+    },
+    {
+      "timestamp": "2026-06-28 13:07:29",
+      "results": {
+        "economic": "1.75",
+        "social": "-4.41"
+      }
+    },
+    {
+      "timestamp": "2026-06-30 16:31:36",
+      "results": {
+        "economic": "-1.25",
+        "social": "-4.36"
+      }
+    },
+    {
+      "timestamp": "2026-06-30 16:45:21",
+      "results": {
+        "economic": "1.25",
+        "social": "-4.05"
+      }
+    },
+    {
+      "timestamp": "2026-07-05 19:19:41",
+      "results": {
+        "economic": "-0.13",
+        "social": "-4.26"
+      }
+    },
+    {
+      "timestamp": "2026-07-05 19:25:41",
+      "results": {
+        "economic": "-2.0",
+        "social": "-3.85"
+      }
+    },
+    {
+      "timestamp": "2026-07-06 20:25:36",
+      "results": {
+        "economic": "-0.63",
+        "social": "-4.15"
+      }
+    },
+    {
+      "timestamp": "2026-07-06 20:48:59",
+      "results": {
+        "economic": "0.0",
+        "social": "-4.82"
+      }
+    },
+    {
+      "timestamp": "2026-07-08 10:41:42",
+      "results": {
+        "economic": "0.63",
+        "social": "-4.46"
+      }
+    },
+    {
+      "timestamp": "2026-07-08 10:48:02",
+      "results": {
+        "economic": "0.38",
+        "social": "-4.92"
+      }
+    },
+    {
+      "timestamp": "2026-07-08 10:57:09",
+      "results": {
+        "economic": "-0.25",
+        "social": "-4.46"
+      }
+    },
+    {
+      "timestamp": "2026-07-08 11:07:27",
+      "results": {
+        "economic": "-1.13",
+        "social": "-5.18"
+      }
+    },
+    {
+      "timestamp": "2026-07-09 12:35:58",
+      "results": {
+        "economic": "-5.38",
+        "social": "-5.85"
+      }
+    },
+    {
+      "timestamp": "2026-07-09 12:49:22",
+      "results": {
+        "economic": "-6.13",
+        "social": "-5.74"
+      }
+    },
+    {
+      "timestamp": "2026-07-09 12:57:33",
+      "results": {
+        "economic": "-4.75",
+        "social": "-5.64"
+      }
+    }
+  ]
 }
