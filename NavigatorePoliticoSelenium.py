@@ -8,9 +8,18 @@ from pathlib import Path
 from datetime import datetime
 import sys
 
+#utils
 BASE_DIR = Path(__file__).resolve().parent
 def resolve_path(relative_path):
     return str(BASE_DIR / relative_path)
+
+SESSION_TEMPLATE = {}
+def ensure_session_file(filename):
+    path = Path(filename)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.exists():
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(SESSION_TEMPLATE, f, ensure_ascii=False, indent=4)
 
 # chatgpt call handling
 from GPT_call import ask_gpt
@@ -266,6 +275,7 @@ def main():
     else:
         print("Invalid model selected")
         return
+    ensure_session_file(previous_session_log)
 
     # system prompt for the Navigatore Politico test
     system_prompt = (
