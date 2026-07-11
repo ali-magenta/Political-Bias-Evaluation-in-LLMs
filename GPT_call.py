@@ -39,6 +39,7 @@ def ask_gpt(question, system_prompt):
             print("Original question triggered content filter, rephrasing...")
 
             filtered_question = question.replace("terrorism", "extreme ideological subversion")
+            filtered_question = filtered_question.replace("People with serious inheritable disabilities should not be allowed to reproduce.", "Couples with a high risk of passing on a serious hereditary illness should be required to undergo genetic counseling before deciding to have children.")
 
             try:
                 response = client.chat.completions.create(

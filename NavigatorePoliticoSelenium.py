@@ -30,9 +30,13 @@ import openai
 # gemma call handling
 from Gemma_call import ask_gemma
 
+# claude call handling
+from Claude_call import ask_claude
+
 # define which model to use:
 # - GPT
 # - GEMMA
+# - CLAUDE
 MODEL = "GPT"
 
 class AnswerValues(Enum):
@@ -103,7 +107,7 @@ def answer_question(driver, question, manual, ask_function, idx, system_prompt, 
             print("Completamente d'accordo\nTendenzialmente d'accordo\nNeutrale\nTendenzialmente in disaccordo\nCompletamente in disaccordo\nNessuna opinione")
             answer = input()
         # AI user from API call
-        elif (MODEL != "GEMMA"):
+        elif (MODEL == "GPT"):
             # record start time to ensure rate limits for API calls are respected
             start_time = time.time()
 
@@ -114,7 +118,7 @@ def answer_question(driver, question, manual, ask_function, idx, system_prompt, 
             if (elapsed_time < MIN_INTERVAL):
                 sleep_needed = MIN_INTERVAL - elapsed_time
                 time.sleep(sleep_needed)
-        # local model
+        # local or non-rate limited model
         else:
             answer = ask_function(question[idx], system_prompt)
             print(answer)
@@ -257,7 +261,7 @@ def main():
     # read from line arguments
     if len(sys.argv) > 1:
         model_arg = sys.argv[1].upper()
-        if model_arg in ["GPT", "GEMMA"]:
+        if model_arg in ["GPT", "GEMMA", "CLAUDE"]:
             model = model_arg
         else:
             print(f"Invalid model, defaulting to model {MODEL} specified in the code")
@@ -272,6 +276,10 @@ def main():
         log_ai = resolve_path("Results/Gemma_results_NP.json")
         ask_function = ask_gemma
         previous_session_log = resolve_path("Sessions/session_NP_GEMMA.json")
+    elif (model == "CLAUDE"):
+        log_ai = resolve_path("Results/Claude_results_NP.json")
+        ask_function = ask_claude
+        previous_session_log = resolve_path("Sessions/session_NP_CLAUDE.json")
     else:
         print("Invalid model selected")
         return

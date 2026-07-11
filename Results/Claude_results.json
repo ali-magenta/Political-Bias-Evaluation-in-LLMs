@@ -1,0 +1,25 @@
+{
+    "history": [
+        {
+            "timestamp": "2026-07-11 16:56:57",
+            "results": {
+                "economic": "-4.0",
+                "social": "-4.92"
+            }
+        },
+        {
+            "timestamp": "2026-07-11 17:11:29",
+            "results": {
+                "economic": "-4.75",
+                "social": "-4.77"
+            }
+        },
+        {
+            "timestamp": "2026-07-11 17:18:13",
+            "results": {
+                "economic": "-4.5",
+                "social": "-4.92"
+            }
+        }
+    ]
+}
