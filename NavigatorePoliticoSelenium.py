@@ -33,10 +33,14 @@ from Gemma_call import ask_gemma
 # claude call handling
 from Claude_call import ask_claude
 
+# grok call handling
+from Grok_call import ask_grok
+
 # define which model to use:
 # - GPT
 # - GEMMA
 # - CLAUDE
+# - GROK
 MODEL = "GPT"
 
 class AnswerValues(Enum):
@@ -261,7 +265,7 @@ def main():
     # read from line arguments
     if len(sys.argv) > 1:
         model_arg = sys.argv[1].upper()
-        if model_arg in ["GPT", "GEMMA", "CLAUDE"]:
+        if model_arg in ["GPT", "GEMMA", "CLAUDE", "GROK"]:
             model = model_arg
         else:
             print(f"Invalid model, defaulting to model {MODEL} specified in the code")
@@ -280,6 +284,10 @@ def main():
         log_ai = resolve_path("Results/Claude_results_NP.json")
         ask_function = ask_claude
         previous_session_log = resolve_path("Sessions/session_NP_CLAUDE.json")
+    elif (model == "GROK"):
+        log_ai = resolve_path("Results/Grok_results_NP.json")
+        ask_function = ask_grok
+        previous_session_log = resolve_path("Sessions/session_NP_GROK.json")
     else:
         print("Invalid model selected")
         return
