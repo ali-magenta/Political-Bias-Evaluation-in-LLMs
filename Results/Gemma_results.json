@@ -1,13 +1,6 @@
 {
   "history": [
     {
-      "timestamp": "2026-06-24 12:53:12",
-      "results": {
-        "economic": "1.88",
-        "social": "-2.15"
-      }
-    },
-    {
       "timestamp": "2026-06-28 12:46:48",
       "results": {
         "economic": "1.88",
@@ -19,6 +12,13 @@
       "results": {
         "economic": "-0.75",
         "social": "-1.64"
+      }
+    },
+    {
+      "timestamp": "2026-07-12 14:25:23",
+      "results": {
+        "economic": "-3.13",
+        "social": "-3.54"
       }
     }
   ]

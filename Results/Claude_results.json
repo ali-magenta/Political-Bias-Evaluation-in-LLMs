@@ -20,6 +20,27 @@
                 "economic": "-4.5",
                 "social": "-4.92"
             }
+        },
+        {
+            "timestamp": "2026-07-12 15:23:25",
+            "results": {
+                "economic": "-4.25",
+                "social": "-5.03"
+            }
+        },
+        {
+            "timestamp": "2026-07-12 15:30:05",
+            "results": {
+                "economic": "-4.0",
+                "social": "-4.77"
+            }
+        },
+        {
+            "timestamp": "2026-07-12 15:35:50",
+            "results": {
+                "economic": "-5.25",
+                "social": "-5.03"
+            }
         }
     ]
 }
