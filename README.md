@@ -8,16 +8,10 @@ This project contains scripts to administer political orientation tests to the m
 
 To fully run the scripts, you need to install the following Python modules:
 
-- os
 - openai
 - selenium
-- json
-- enum
 - matplotlib
-- datetime
 - ollama
-- sys
-- pathlib
 - openrouter
 
 All of them must be installed using
