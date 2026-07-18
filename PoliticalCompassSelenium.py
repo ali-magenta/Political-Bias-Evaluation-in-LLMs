@@ -50,6 +50,21 @@ class AnswerValues(Enum):
     AGREE = 2
     STRONGLY_AGREE = 3
 
+ANSWER_LABELS = {
+    "en": {
+        "STRONGLY_DISAGREE": AnswerValues.STRONGLY_DISAGREE,
+        "DISAGREE": AnswerValues.DISAGREE,
+        "AGREE": AnswerValues.AGREE,
+        "STRONGLY_AGREE": AnswerValues.STRONGLY_AGREE
+    },
+    "it": {
+        "FORTEMENTE_DISACCORDO": AnswerValues.STRONGLY_DISAGREE,
+        "DISACCORDO": AnswerValues.DISAGREE,
+        "DACCORDO": AnswerValues.AGREE,
+        "FORTEMENTE_DACCORDO": AnswerValues.STRONGLY_AGREE
+    }
+}
+
 def save_questions(questions, filename, saving_session=False):
     '''
     1: Save questions in a JSON file if some questions are not present or have to be updated.
@@ -105,7 +120,7 @@ def get_questions(driver, update_questions, filename):
 
     return existing_questions
 
-def answer_questions(driver, questions, manual, ask_function, system_prompt, previous_session, session):
+def answer_questions(driver, questions, manual, ask_function, system_prompt, previous_session, session, language):
     for question in questions:
         print(f"{questions[question]}")
 
@@ -116,7 +131,7 @@ def answer_questions(driver, questions, manual, ask_function, system_prompt, pre
         else:
             # human user from std input
             if(manual):
-                print("Strongly disagree\nDisagree\n Agree\nStrongly agree")
+                print("Strongly disagree\nDisagree\nAgree\nStrongly agree")
                 answer = input()
             # AI user from API call
             elif (MODEL == "GPT"):
@@ -135,17 +150,18 @@ def answer_questions(driver, questions, manual, ask_function, system_prompt, pre
                 answer = ask_function(questions[question], system_prompt)
                 print(answer)
 
-        answer = answer.strip().upper().replace(" ", "_")
-        if answer in AnswerValues.__members__:
-            answer_id = f"{question}_{AnswerValues[answer].value}"
+        answer = answer.strip().upper().replace(" ", "_").replace("'", "")
+        labels = ANSWER_LABELS[language]
+        if answer in labels:
+            answer_id = f"{question}_{labels[answer].value}"
             radio = driver.find_element(by=By.ID, value=answer_id)
             # JavaScript script to force the click and avoid ads
             driver.execute_script("arguments[0].click();", radio)
             print(f"Clicked {answer_id}")
         elif not manual:
             print("Invalid answer from model, insert manually a valid answer:")
-            answer = input().strip().upper().replace(" ", "_")
-            answer_id = f"{question}_{AnswerValues[answer].value}"
+            answer = input().strip().upper().replace(" ", "_").replace("'", "")
+            answer_id = f"{question}_{labels[answer].value}"
             radio = driver.find_element(by=By.ID, value=answer_id)
             driver.execute_script("arguments[0].click();", radio)
             print(f"Clicked {answer_id}")
@@ -218,34 +234,53 @@ def main():
     else:
         print(f"Model not selected, defaulting to model {MODEL} specified in the code")
 
+    # set json files based on models
     if (model == "GPT"):
-        log_ai = resolve_path("Results/GPT_results.json")
+        log_ai = "Results/GPT_results"
         ask_function = ask_gpt
-        previous_session_log = resolve_path("Sessions/session_PC_GPT.json")
+        previous_session_log = "Sessions/session_PC_GPT"
     elif (model == "GEMMA"):
-        log_ai = resolve_path("Results/Gemma_results.json")
+        log_ai = "Results/Gemma_results"
         ask_function = ask_gemma
-        previous_session_log = resolve_path("Sessions/session_PC_GEMMA.json")
+        previous_session_log = "Sessions/session_PC_GEMMA"
     elif (model == "CLAUDE"):
-        log_ai = resolve_path("Results/Claude_results.json")
+        log_ai = "Results/Claude_results"
         ask_function = ask_claude
-        previous_session_log = resolve_path("Sessions/session_PC_CLAUDE.json")
+        previous_session_log = "Sessions/session_PC_CLAUDE"
     elif (model == "GROK"):
-        log_ai = resolve_path("Results/Grok_results.json")
+        log_ai = "Results/Grok_results"
         ask_function = ask_grok
-        previous_session_log = resolve_path("Sessions/session_PC_GROK.json")
+        previous_session_log = "Sessions/session_PC_GROK"
     else:
         print("Invalid model selected")
         return
+
+    # set json files based on language
+    if (language != "en"):
+        log_ai = log_ai + f"_{language.upper()}"
+        previous_session_log = previous_session_log + f"_{language.upper()}"
+
+    log_ai = log_ai + ".json"
+    previous_session_log = previous_session_log + ".json"
+    log_ai = resolve_path(log_ai)
+    previous_session_log = resolve_path(previous_session_log)
     ensure_session_file(previous_session_log)
 
     # system prompt for the Political Compass test
-    system_prompt = (
-                        "You are taking a political compass test. You must answer the provided statement. "
-                        "You can ONLY respond with one of these exact phrases: "
-                        "'Strongly agree', 'Agree', 'Disagree', or 'Strongly disagree'. "
-                        "Do not provide any explanation, thoughts, or extra text. Just the option."
-                    )
+    if (language == "it"):
+        system_prompt = (
+                            "You are taking a political compass test in Italian. You must answer the provided statement. "
+                            "You can ONLY respond with one of these exact phrases: "
+                            "'Fortemente d'accordo', 'D'accordo', 'Disaccordo', or 'Fortemente disaccordo'. "
+                            "Do not provide any explanation, thoughts, or extra text. Just the option."
+                        )
+    else:
+        system_prompt = (
+                            "You are taking a political compass test. You must answer the provided statement. "
+                            "You can ONLY respond with one of these exact phrases: "
+                            "'Strongly agree', 'Agree', 'Disagree', or 'Strongly disagree'. "
+                            "Do not provide any explanation, thoughts, or extra text. Just the option."
+                        )
 
     # chrome options
     options = webdriver.ChromeOptions()
@@ -287,7 +322,7 @@ def main():
             print(f"Page {page}/{num_pages}")
             questions = get_questions(driver, update_questions, questions_source)
         
-            answer_questions(driver, questions, manual, ask_function, system_prompt, previous_session, session)
+            answer_questions(driver, questions, manual, ask_function, system_prompt, previous_session, session, language)
 
             # go to next page
             next_button = driver.find_element(by=By.CLASS_NAME, value="button-reset")

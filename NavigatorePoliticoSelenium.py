@@ -138,7 +138,7 @@ def answer_question(driver, question, manual, ask_function, idx, system_prompt, 
         print("Invalid answer from model, insert manually a valid answer:")
         answer = input().strip().upper().replace(" ", "_").replace("'", "")
         ticks = driver.find_elements(by=By.CLASS_NAME, value="tick")
-        answer_tick = ticks[AnswerValues[answer]]
+        answer_tick = ticks[AnswerValues[answer].value]
         driver.execute_script("arguments[0].click();", answer_tick)
         print(f"Clicked {answer}")
     else:
@@ -209,7 +209,7 @@ def party_preference(driver, ask_function, question_param):
         question_in = "could"
         box = 1
     else:
-        question_in = "would never"
+        question_in = "would not"
         box = 2
 
     parties = [

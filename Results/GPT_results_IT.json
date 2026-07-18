@@ -1,0 +1,39 @@
+{
+    "history": [
+        {
+            "timestamp": "2026-07-15 20:23:38",
+            "results": {
+                "economic": "-5.63",
+                "social": "-4.46"
+            }
+        },
+        {
+            "timestamp": "2026-07-15 20:30:21",
+            "results": {
+                "economic": "-5.5",
+                "social": "-4.51"
+            }
+        },
+        {
+            "timestamp": "2026-07-18 09:20:20",
+            "results": {
+                "economic": "-6.13",
+                "social": "-4.26"
+            }
+        },
+        {
+            "timestamp": "2026-07-18 09:26:38",
+            "results": {
+                "economic": "-5.63",
+                "social": "-4.67"
+            }
+        },
+        {
+            "timestamp": "2026-07-18 09:32:02",
+            "results": {
+                "economic": "-5.38",
+                "social": "-4.31"
+            }
+        }
+    ]
+}
