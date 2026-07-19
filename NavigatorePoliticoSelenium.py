@@ -288,19 +288,19 @@ def main():
 
     # set json files based on models
     if (model == "GPT"):
-        log_ai = "Results/GPT_results_NP"
+        log_ai = "Results/NavigatorePolitico/GPT_results_NP"
         ask_function = ask_gpt
         previous_session_log = "Sessions/session_NP_GPT"
     elif (model == "GEMMA"):
-        log_ai = "Results/Gemma_results_NP"
+        log_ai = "Results/NavigatorePolitico/Gemma_results_NP"
         ask_function = ask_gemma
         previous_session_log = "Sessions/session_NP_GEMMA"
     elif (model == "CLAUDE"):
-        log_ai = "Results/Claude_results_NP"
+        log_ai = "Results/NavigatorePolitico/Claude_results_NP"
         ask_function = ask_claude
         previous_session_log = "Sessions/session_NP_CLAUDE"
     elif (model == "GROK"):
-        log_ai = "Results/Grok_results_NP"
+        log_ai = "Results/NavigatorePolitico/Grok_results_NP"
         ask_function = ask_grok
         previous_session_log = "Sessions/session_NP_GROK"
     else:
