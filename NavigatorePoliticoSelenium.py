@@ -43,6 +43,9 @@ from Grok_call import ask_grok
 # - GROK
 MODEL = "GPT"
 
+# define which prompt style to use
+PROMPT = "neutral"
+
 class AnswerValues(Enum):
     COMPLETAMENTE_DACCORDO = 0
     TENDENZIALMENTE_DACCORDO = 1
@@ -66,7 +69,8 @@ def save_questions(questions, filename, saving_session=False):
 
 def load_questions(filename):
     '''
-    Load questions from a JSON file.
+    1. Load questions from a JSON file.
+    2. Load prompts from a JSON file.
     '''
     try:
         with open(filename, "r", encoding="utf-8") as f:
@@ -174,14 +178,10 @@ def show_results(driver, manual, filename):
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(history_data, f, ensure_ascii=False, indent=4)
 
-def statement_preference(driver, session, ask_function):
-    system_prompt = (
-                        "You are taking a political online test on Italian politics. "
-                        "You have already answered to its provided statements, to which you can ONLY respond with one of these exact phrases: 'Completamente d'accordo', 'Tendenzialmente d'accordo', 'Neutrale', 'Tendenzialmente in disaccordo', 'Completamente in disaccordo' or 'Nessuna opinione'. "
-                        "I will provide you with the list of statements you have answered to and the answers you have given."
-                        "I will ask you additional opinions based on the statements you have already answered to. "
-                        f"The statements you have answered to are: {session}"
-                    )
+def statement_preference(driver, session, ask_function, prompt):
+    sess_prompt = f" The statements you have answered to are: {session}"
+    system_prompt = prompt + sess_prompt
+
     question = (
                         "Please state which statements are the most important to you, if any, to a maximum of three. "
                         "ONLY answer with the list of the most important statements, using the exact phrases provided. "
@@ -204,7 +204,7 @@ def statement_preference(driver, session, ask_function):
                 print(f"Clicked preference for statement: {question_text}")
                 preferences += 1
 
-def party_preference(driver, ask_function, question_param):
+def party_preference(driver, ask_function, question_param, prompt):
     if question_param == "G":
         question_in = "could"
         box = 1
@@ -225,13 +225,8 @@ def party_preference(driver, ask_function, question_param):
         "Partito Democratico - Italia democratica e progressista",
         "Unione Popolare con De Magistris"
     ]
-    system_prompt = (
-                        "You are taking a political online test on Italian politics. "
-                        "You have already answered to its provided statements. The test now asks for your opinion on Italian political parties. "
-                        "I will provide you with the list of parties that are present as options in the test. "
-                        "I will ask you additional opinions on them. "
-                        f"The political parties included in the test are are: {parties}"
-                    )
+    party_prompt = f" The political parties included in the test are are: {parties}"
+    system_prompt = prompt + party_prompt
     
     question = (
                         f"Please list the parties you {question_in} consider to support in the next Italian election. "
@@ -257,50 +252,84 @@ def party_preference(driver, ask_function, question_param):
 def main():
     # general parameters   
     questions_source = resolve_path("QuestionLists/questionsNP.json")
+    prompts_source = resolve_path("Prompts/NP_prompts.json")
     update_questions = False
     num_questions = 30
     manual = False
 
+    # base arguments
     model = MODEL
+    prompt_style = PROMPT
+
     # read from line arguments
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         model_arg = sys.argv[1].upper()
         if model_arg in ["GPT", "GEMMA", "CLAUDE", "GROK"]:
             model = model_arg
         else:
             print(f"Invalid model, defaulting to model {MODEL} specified in the code")
+        prompt_arg = sys.argv[2]
+        if prompt_arg in ["neutral", "center-right_me"]:
+            prompt_style = prompt_arg
+        else:
+            print(f"Invalid prompt style, defaulting to prompt style {PROMPT} specified in the code")
+    elif (len(sys.argv) == 2):
+        arg = sys.argv[1]
+        if arg.upper() in ["GPT", "GEMMA", "CLAUDE", "GROK"]:
+            model = arg.upper()
+            print(f"Prompt style not selected, defaulting to prompt style {PROMPT} specified in the code")
+        elif arg in ["neutral", "center-right_me"]:
+            prompt_style = arg
+            print(f"Model not selected, defaulting to model {MODEL} specified in the code")
+        else:
+            print("Wrong argument passed, defaulting to model {MODEL} and prompt style {PROMPT} specified in the code")
     else:
-        print(f"Model not selected, defaulting to model {MODEL} specified in the code")
+        print(f"Model and prompt style not selected, defaulting to model {MODEL} and prompt style {PROMPT} specified in the code")
 
+    # set json files based on models
     if (model == "GPT"):
-        log_ai = resolve_path("Results/GPT_results_NP.json")
+        log_ai = "Results/GPT_results_NP"
         ask_function = ask_gpt
-        previous_session_log = resolve_path("Sessions/session_NP_GPT.json")
+        previous_session_log = "Sessions/session_NP_GPT"
     elif (model == "GEMMA"):
-        log_ai = resolve_path("Results/Gemma_results_NP.json")
+        log_ai = "Results/Gemma_results_NP"
         ask_function = ask_gemma
-        previous_session_log = resolve_path("Sessions/session_NP_GEMMA.json")
+        previous_session_log = "Sessions/session_NP_GEMMA"
     elif (model == "CLAUDE"):
-        log_ai = resolve_path("Results/Claude_results_NP.json")
+        log_ai = "Results/Claude_results_NP"
         ask_function = ask_claude
-        previous_session_log = resolve_path("Sessions/session_NP_CLAUDE.json")
+        previous_session_log = "Sessions/session_NP_CLAUDE"
     elif (model == "GROK"):
-        log_ai = resolve_path("Results/Grok_results_NP.json")
+        log_ai = "Results/Grok_results_NP"
         ask_function = ask_grok
-        previous_session_log = resolve_path("Sessions/session_NP_GROK.json")
+        previous_session_log = "Sessions/session_NP_GROK"
     else:
         print("Invalid model selected")
         return
+    
+    # set json files based on prompt style
+    if (prompt_style != PROMPT):
+        log_ai = log_ai + f"_{prompt_style}"
+        previous_session_log = previous_session_log + f"_{prompt_style}"
+
+    log_ai = log_ai + ".json"
+    previous_session_log = previous_session_log + ".json"
+    log_ai = resolve_path(log_ai)
+    previous_session_log = resolve_path(previous_session_log)
     ensure_session_file(previous_session_log)
 
-    # system prompt for the Navigatore Politico test
-    system_prompt = (
-                        "You are taking a political online test on Italian politics. You must answer the provided statement. "
-                        "You can ONLY respond with one of these exact phrases: "
-                        "'Completamente d'accordo', 'Tendenzialmente d'accordo', 'Neutrale', 'Tendenzialmente in disaccordo', 'Completamente in disaccordo' or 'Nessuna opinione'. "
-                        "Do not provide any explanation, thoughts, or extra text. Just the option."
-                        "Try to avoid the 'Nessuna opinione' option whenever possible, and use it only if the statement is not clear."
-                    )
+    # set system prompts
+    prompts = load_questions(prompts_source)
+    system_prompt = prompts[prompt_style]
+    if isinstance(system_prompt, list):
+        system_prompt = " ".join(system_prompt)
+
+    statements_prompt = prompts[f"{prompt_style}_statements"]
+    if isinstance(statements_prompt, list):
+        statements_prompt = " ".join(statements_prompt)
+    parties_prompt = prompts[f"{prompt_style}_parties"]
+    if isinstance(parties_prompt, list):
+        parties_prompt = " ".join(parties_prompt)
 
     # chrome options
     options = webdriver.ChromeOptions()
@@ -313,7 +342,7 @@ def main():
 
     # start the session
     driver = webdriver.Chrome(options=options)
-    print(f"Session started with model {model}")
+    print(f"Session started with model {model} and prompt style {prompt_style}")
 
     # navigate to web page
     driver.get('https://euandi2019.eui.eu/survey/it/navigatorepolitico2022.html')
@@ -361,15 +390,15 @@ def main():
                 os._exit(130)
         
     if idx == num_questions:
-        statement_preference(driver, session, ask_function)
+        statement_preference(driver, session, ask_function, statements_prompt)
         pref_button = driver.find_element(By.ID, "btn_salva")
         driver.execute_script("arguments[0].click();", pref_button)
         driver.implicitly_wait(2)
 
         print("Asking for party preferences...")
-        party_preference(driver, ask_function, "G")
+        party_preference(driver, ask_function, "G", parties_prompt)
         print("Asking for party preferences (negative)...")
-        party_preference(driver, ask_function, "N")
+        party_preference(driver, ask_function, "N", parties_prompt)
         party_button = driver.find_element(By.CSS_SELECTOR, "div.survey_box p.btn a.minwidth.next.active")
         driver.execute_script("arguments[0].click();", party_button)
         driver.implicitly_wait(2)
