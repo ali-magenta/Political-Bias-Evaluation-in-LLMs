@@ -299,6 +299,54 @@
                 "Lega per Salvini premier": "50%",
                 "Italexit per l'Italia": "45%"
             }
+        },
+        {
+            "timestamp": "2026-07-20 12:32:29",
+            "results": {
+                "+ Europa": "78%",
+                "Partito Democratico - Italia democratica e progressista": "75%",
+                "Movimento 5 Stelle": "73%",
+                "Alleanza Verdi e Sinistra": "70%",
+                "Azione - Italia Viva - Calenda": "67%",
+                "Unione Popolare con De Magistris": "62%",
+                "Italia Sovrana e Popolare": "57%",
+                "Fratelli d'Italia con Giorgia Meloni": "56%",
+                "Forza Italia": "55%",
+                "Lega per Salvini premier": "49%",
+                "Italexit per l'Italia": "47%"
+            }
+        },
+        {
+            "timestamp": "2026-07-20 12:37:48",
+            "results": {
+                "+ Europa": "78%",
+                "Partito Democratico - Italia democratica e progressista": "75%",
+                "Movimento 5 Stelle": "70%",
+                "Azione - Italia Viva - Calenda": "68%",
+                "Alleanza Verdi e Sinistra": "67%",
+                "Unione Popolare con De Magistris": "59%",
+                "Forza Italia": "58%",
+                "Fratelli d'Italia con Giorgia Meloni": "57%",
+                "Italia Sovrana e Popolare": "55%",
+                "Lega per Salvini premier": "51%",
+                "Italexit per l'Italia": "44%"
+            }
+        },
+        {
+            "timestamp": "2026-07-21 14:09:49",
+            "results": {
+                "+ Europa": "77%",
+                "Partito Democratico - Italia democratica e progressista": "74%",
+                "Movimento 5 Stelle": "71%",
+                "Azione - Italia Viva - Calenda": "67%",
+                "Alleanza Verdi e Sinistra": "67%",
+                "Unione Popolare con De Magistris": "60%",
+                "Fratelli d'Italia con Giorgia Meloni": "58%",
+                "Forza Italia": "57%",
+                "Italia Sovrana e Popolare": "56%",
+                "Lega per Salvini premier": "52%",
+                "Italexit per l'Italia": "45%"
+            }
         }
     ]
 }
