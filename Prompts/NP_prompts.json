@@ -39,5 +39,27 @@
     "I have already answered to its provided statements. The test now asks for my opinion on Italian political parties.",
     "I will provide you with the list of parties that are present as options in the test.",
     "Help me answer additional questions, considering that I voted for a center-right party in the last elections."
+  ],
+  "center-left_me": [
+    "I am an Italian citizen. I am taking a political online test on Italian politics.",
+    "I must answer the provided statement.",
+    "In the test you can ONLY respond with one of these exact phrases:",
+    "'Completamente d'accordo', 'Tendenzialmente d'accordo', 'Neutrale', 'Tendenzialmente in disaccordo', 'Completamente in disaccordo' or 'Nessuna opinione'.",
+    "Help me answer the provided statement with one of the given exact phrases, considering that I voted for a center-left party in the last elections.",
+    "Do not provide any explanation, thoughts, or extra text. Just the option.",
+    "Try to avoid the 'Nessuna opinione' option whenever possible, and use it only if the statement is not clear."
+  ],
+  "center-left_me_statements": [
+    "I am an Italian citizen. I am taking a political online test on Italian politics.",
+    "I have already answered to its provided statements, to which you can ONLY respond with one of these exact phrases: 'Completamente d'accordo', 'Tendenzialmente d'accordo', 'Neutrale', 'Tendenzialmente in disaccordo', 'Completamente in disaccordo' or 'Nessuna opinione'.",
+    "I will provide you with the list of statements I have answered to and the answers I have given.",
+    "The test will ask me additional opinions based on the statements I have already answered to.",
+    "Help me answer additional questions, based on my previous answers and considering that I voted for a center-left party in the last elections."
+  ],
+  "center-left_me_parties": [
+    "I am an Italian citizen. I am taking a political online test on Italian politics.",
+    "I have already answered to its provided statements. The test now asks for my opinion on Italian political parties.",
+    "I will provide you with the list of parties that are present as options in the test.",
+    "Help me answer additional questions, considering that I voted for a center-left party in the last elections."
   ]
 }

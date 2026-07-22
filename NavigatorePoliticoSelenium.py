@@ -269,7 +269,7 @@ def main():
         else:
             print(f"Invalid model, defaulting to model {MODEL} specified in the code")
         prompt_arg = sys.argv[2]
-        if prompt_arg in ["neutral", "center-right_me"]:
+        if prompt_arg in ["neutral", "center-right_me", "center-left_me"]:
             prompt_style = prompt_arg
         else:
             print(f"Invalid prompt style, defaulting to prompt style {PROMPT} specified in the code")
@@ -278,7 +278,7 @@ def main():
         if arg.upper() in ["GPT", "GEMMA", "CLAUDE", "GROK"]:
             model = arg.upper()
             print(f"Prompt style not selected, defaulting to prompt style {PROMPT} specified in the code")
-        elif arg in ["neutral", "center-right_me"]:
+        elif arg in ["neutral", "center-right_me", "center-left_me"]:
             prompt_style = arg
             print(f"Model not selected, defaulting to model {MODEL} specified in the code")
         else:

@@ -62,9 +62,20 @@ For all of them, you can modify the model used when calling the API from their `
 
 `PoliticalCompassSelenium.py` is a script that performs the Political Compass test through the Selenium web automation tool. The script calls the functions in the model calling scripts and uses the answers to iterate through the test statements. At the end the result is shown with a graph similar to the official one obtained in the website and it is saved in a JSON file that keeps the history of all tests taken.
 
+You can choose to perform the Political Compass test in English or in Italian. To do so, modify the `language` parameter at the top of the main function. Set it to `en` for a test in English (default) or to `it` for a test in Italian.
+
 `NavigatorePoliticoSelenium.py` is a script that performs the Navigatore Politico test through the Selenium web automation tool. The script calls the functions in the model calling scripts and uses the answers to iterate through the test statements. At the end the result is shown on the terminal and it is saved in a JSON file that keeps the history of all tests taken.
 
-To choose which model to use during both tests, you can pass the name of the model as a line argument or you can modify the `MODEL` variable at the top of the script. As of now, you can choose the following options:
+In the script for Navigatore Politico you have the possibility to perform role-playing runs using biased system prompts. To choose which prompt style to use during the tests, you can pass its name as a line argument (suggested) or you can modify the `PROMPT` variable at the top of the script. In case you are selecting both the model and the pompt style from terminal, remember to pass the model first and then the prompt style.
+As of now, you can choose the following options:
+
+- `neutral` for a non-biased run (default)
+- `center-right_me` ("I am..." structure, center-right bias)
+- `center-left_me` ("I am..." structure, center-left bias)
+
+`ItaMatSelenium.py` is a script that performs the Italian 2025 referendum test available on Itamat through the Selenium web automation tool. The script calls the functions in the model calling scripts and uses the answers to iterate through the test statements. At the end the result is shown on the terminal and it is saved in a JSON file that keeps the history of all tests taken.
+
+To choose which model to use during the tests, you can pass the name of the model as a line argument (suggested) or you can modify the `MODEL` variable at the top of the script. As of now, you can choose the following options:
 
 - `GPT` for GPT models
 - `CLAUDE` for Claude models
@@ -72,3 +83,5 @@ To choose which model to use during both tests, you can pass the name of the mod
 - `GEMMA` for Gemma local models
 
 In case you are performing a longer iteration of the test (e.g. with a local model), it is possible to interrupt with Ctrl+C, save the current session and restart it later.
+
+`PoliticalCompassStatistics.py` is a script that computes statistics and creates graphs for results coming from the Political Compass test. Change the `MODEL` parameter at the top of the script if you want to visualize data of models different from GPT.
