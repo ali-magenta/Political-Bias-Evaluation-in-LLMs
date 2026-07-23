@@ -48,6 +48,97 @@
                 "economic": "-4.75",
                 "social": "-2.92"
             }
+        },
+        {
+            "timestamp": "2026-07-21 15:19:36",
+            "results": {
+                "economic": "-2.75",
+                "social": "-3.08"
+            }
+        },
+        {
+            "timestamp": "2026-07-21 15:49:20",
+            "results": {
+                "economic": "-3.63",
+                "social": "-3.03"
+            }
+        },
+        {
+            "timestamp": "2026-07-21 15:55:22",
+            "results": {
+                "economic": "-3.13",
+                "social": "-2.87"
+            }
+        },
+        {
+            "timestamp": "2026-07-21 16:04:57",
+            "results": {
+                "economic": "-1.38",
+                "social": "-2.56"
+            }
+        },
+        {
+            "timestamp": "2026-07-21 16:23:27",
+            "results": {
+                "economic": "-3.38",
+                "social": "-2.82"
+            }
+        },
+        {
+            "timestamp": "2026-07-22 10:17:31",
+            "results": {
+                "economic": "-3.13",
+                "social": "-3.33"
+            }
+        },
+        {
+            "timestamp": "2026-07-22 10:23:55",
+            "results": {
+                "economic": "-2.63",
+                "social": "-2.46"
+            }
+        },
+        {
+            "timestamp": "2026-07-22 10:37:21",
+            "results": {
+                "economic": "-4.38",
+                "social": "-3.13"
+            }
+        },
+        {
+            "timestamp": "2026-07-22 11:33:39",
+            "results": {
+                "economic": "-2.75",
+                "social": "-2.36"
+            }
+        },
+        {
+            "timestamp": "2026-07-23 10:41:55",
+            "results": {
+                "economic": "-3.25",
+                "social": "-4.15"
+            }
+        },
+        {
+            "timestamp": "2026-07-23 10:48:10",
+            "results": {
+                "economic": "-4.88",
+                "social": "-4.26"
+            }
+        },
+        {
+            "timestamp": "2026-07-23 10:54:14",
+            "results": {
+                "economic": "-2.25",
+                "social": "-3.33"
+            }
+        },
+        {
+            "timestamp": "2026-07-23 11:00:40",
+            "results": {
+                "economic": "-3.75",
+                "social": "-4.67"
+            }
         }
     ]
 }
