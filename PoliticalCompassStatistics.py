@@ -6,6 +6,7 @@ import statistics
 from datetime import datetime
 
 MODEL = "GPT"
+LANGUAGE = ""
 
 BASE_DIR = Path(__file__).resolve().parent
 def resolve_path(relative_path):
@@ -27,7 +28,8 @@ def compute_stats(values):
     median = statistics.median(values)
     within_sd = sum(1 for v in values if abs(v - mean) <= sd)
     within_sd_pct = (within_sd / len(values)) * 100
-    return {"mean": mean, "sd": sd, "median": median, "within_sd_pct": within_sd_pct}
+    value_range = max(values) - min(values)
+    return {"mean": mean, "sd": sd, "median": median, "within_sd_pct": within_sd_pct, "range": value_range}
 
 def show_pc_graph(econ_values, soc_values, econ_mean, soc_mean):    
     fig, ax = pyplot.subplots(figsize=(8, 8))
@@ -155,7 +157,7 @@ def show_boxplot(econ_values, soc_values):
     return fig
     
 def main():
-    results_file = resolve_path(f"Results/PoliticalCompass/{MODEL}_results.json")
+    results_file = resolve_path(f"Results/PoliticalCompass/{MODEL}_results{LANGUAGE}.json")
     results = load_results(results_file)
     history = results.get("history", [])
     total_results = len(history)
@@ -177,6 +179,8 @@ def main():
     print(f"Social: {soc_stats['sd']:.2f}")
     print(f"Percentage of values within 1 SD on economic axis: {econ_stats['within_sd_pct']:.2f}%")
     print(f"Percentage of values within 1 SD on social axis: {soc_stats['within_sd_pct']:.2f}%")
+    print(f"Range on economic axis: {econ_stats['range']:.2f}")
+    print(f"Range on social axis: {soc_stats['range']:.2f}")
 
     print("The median on results is:")
     print(f"Economic: {econ_stats['median']:.2f}")
