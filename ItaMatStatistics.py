@@ -4,6 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as pyplot
 import numpy as np
 import pandas as pd
+from scipy.stats import pearsonr
 
 MODEL = "GPT"
 
@@ -149,9 +150,9 @@ def show_heatmap(score_df):
     ax.set_xticklabels(short_labels(order), rotation=30, ha="right", fontsize=9)
     ax.set_yticklabels(range(len(score_df)))
     ax.set_yticklabels(day_change_labels(score_df.index), fontsize=8)
-    ax.set_title("Sì/No score heatmap: session + question", fontsize=13, fontweight="bold", pad=15)
+    ax.set_title("Sì/No score heatmap: session x question", fontsize=13, fontweight="bold", pad=15)
     cbar = fig.colorbar(im, ax=ax, shrink=0.8)
-    cbar.set_label("Score (0 No .. 59 neutral .. 100 Sì)")
+    cbar.set_label("Score (0 No .. 50 neutral .. 100 Sì)")
     fig.tight_layout()
     return fig 
 
@@ -218,8 +219,22 @@ def show_stance_distribution(stats):
     fig.tight_layout()
     return fig    
 
-def show_correlation_heatmap(score_df):
+def compute_correlation_and_pvalues(score_df):
+    questions = score_df.columns
     corr = score_df.corr()
+    pvalues = pd.DataFrame(index=questions, columns=questions, dtype=float)
+    for qi in questions:
+        for qj in questions:
+            if qi == qj:
+                pvalues.loc[qi, qj] = 0.0
+            else:
+                _, p = pearsonr(score_df[qi], score_df[qj])
+                pvalues.loc[qi, qj] = p
+    return corr, pvalues
+
+def show_correlation_heatmap(score_df, alpha=0.05):
+    corr, pvalues = compute_correlation_and_pvalues(score_df)
+
     fig, ax = pyplot.subplots(figsize=(8, 7))
     im = ax.imshow(corr, vmin=-1, vmax=1, cmap="coolwarm")
 
@@ -228,12 +243,19 @@ def show_correlation_heatmap(score_df):
     ax.set_yticks(range(len(corr.columns)))
     ax.set_yticklabels(short_labels(corr.columns), fontsize=8)
 
-    for i in range(len(corr)):
-        for j in range(len(corr)):
-            ax.text(j, i, f"{corr.iloc[i, j]:.2f}", ha="center", va="center", fontsize=8,
-                    color="black" if abs(corr.iloc[i, j]) < 0.6 else "white")
+    for i, qi in enumerate(corr.index):
+        for j, qj in enumerate(corr.columns):
+            r = corr.iloc[i, j]
+            p = pvalues.loc[qi, qj]
+            significant = (i != j) and (p < alpha)
+            label = f"{r:.2f}{'*' if significant else ''}"
+            ax.text(j, i, label, ha="center", va="center", fontsize=8,
+                    color="black" if abs(r) < 0.6 else "white")
+            if significant:
+                ax.add_patch(pyplot.Rectangle((j-0.5, i-0.5), 1, 1, fill=False, edgecolor="black", linewidth=2))
 
-    ax.set_title("Correlation between questions' Sì/No score across sessions",
+    ax.set_title("Correlation between questions' Sì/No score across sessions\n"
+                 f"(* statistically significant, p < {alpha})",
                  fontsize=12, fontweight="bold", pad=15)
     fig.colorbar(im, ax=ax, shrink=0.8, label="Pearson r")
     fig.tight_layout()
