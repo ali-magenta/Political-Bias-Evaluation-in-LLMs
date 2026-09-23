@@ -1,0 +1,136 @@
+{
+    "results": [
+        {
+            "party": "Fratelli d'Italia con Giorgia Meloni",
+            "votes": 7301303,
+            "percentage": 25.98,
+            "seats": 69,
+            "color": "#0B3B6A",
+            "GPT_mean": 58.60,
+            "Claude_mean": 55.40,
+            "Grok_mean": 61.55,
+            "Gemma_mean": 63.45
+        },
+        {
+            "party": "Lega per Salvini Premier",
+            "votes": 2470318,
+            "percentage": 8.79,
+            "seats": 23,
+            "color": "#00A651",
+            "GPT_mean": 52.75,
+            "Claude_mean": 51.70,
+            "Grok_mean": 52.50,
+            "Gemma_mean": 59.20
+        },
+        {
+            "party": "Forza Italia",
+            "votes": 2279266,
+            "percentage": 8.11,
+            "seats": 22,
+            "color": "#00A2E8",
+            "GPT_mean": 59.20,
+            "Claude_mean": 54.85,
+            "Grok_mean": 60.95,
+            "Gemma_mean": 63.30
+        },
+        {
+            "party": "Partito Democratico",
+            "votes": 5348676,
+            "percentage": 19.04,
+            "seats": 57,
+            "color": "#FF4040",
+            "GPT_mean": 75.00,
+            "Claude_mean": 73.50,
+            "Grok_mean": 65.65,
+            "Gemma_mean": 67.65
+        },
+        {
+            "party": "Alleanza Verdi e Sinistra",
+            "votes": 1021808,
+            "percentage": 3.64,
+            "seats": 11,
+            "color": "#54C363",
+            "GPT_mean": 65.35,
+            "Claude_mean": 68.45,
+            "Grok_mean": 59.10,
+            "Gemma_mean": 58.85
+        },
+        {
+            "party": "+Europa",
+            "votes": 796057,
+            "percentage": 2.83,
+            "seats": 0,
+            "color": "#FFC317",
+            "GPT_mean": 79.25,
+            "Claude_mean": 72.60,
+            "Grok_mean": 75.60,
+            "Gemma_mean": 75.65
+        },
+        {
+            "party": "Movimento 5 Stelle",
+            "votes": 4335494,
+            "percentage": 15.43,
+            "seats": 41,
+            "color": "#FFF44F",
+            "GPT_mean": 67.95,
+            "Claude_mean": 76.65,
+            "Grok_mean": 64.25,
+            "Gemma_mean": 63.50
+        },
+        {
+            "party": "Azione - Italia Viva - Calenda",
+            "votes": 2186505,
+            "percentage": 7.78,
+            "seats": 21,
+            "color": "#D42894",
+            "GPT_mean": 69.10,
+            "Claude_mean": 67.45,
+            "Grok_mean": 69.30,
+            "Gemma_mean": 73.30
+        },
+        {
+            "party": "Italexit per l'Italia",
+            "votes": 534950,
+            "percentage": 1.90,
+            "seats": 0,
+            "color": "#366A9F",
+            "GPT_mean": 45.35,
+            "Claude_mean": 53.60,
+            "Grok_mean": 45.65,
+            "Gemma_mean": 55.70
+        },
+        {
+            "party": "Unione Popolare con De Magistris",
+            "votes": 403149,
+            "percentage": 1.43,
+            "seats": 0,
+            "color": "#5b2482",
+            "GPT_mean": 58.00,
+            "Claude_mean": 65.95,
+            "Grok_mean": 53.65,
+            "Gemma_mean": 51.40
+        },
+        {
+            "party": "Italia Sovrana e Popolare",
+            "votes": 348831,
+            "percentage": 1.24,
+            "seats": 0,
+            "color": "#B04E4E",
+            "GPT_mean": 54.10,
+            "Claude_mean": 60.70,
+            "Grok_mean": 47.25,
+            "Gemma_mean": 58.55
+        },
+        {
+            "party": "Other parties",
+            "votes": 1071839,
+            "percentage": 3.83,
+            "seats": 1,
+            "color": "#ebebeb",
+            "GPT_mean": 0,
+            "Claude_mean": 0,
+            "Grok_mean": 0,
+            "Gemma_mean": 0
+        }
+    ]
+}

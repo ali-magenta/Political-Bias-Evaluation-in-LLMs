@@ -1,0 +1,88 @@
+{
+    "results": [
+        {
+            "party": "Fratelli d'Italia con Giorgia Meloni",
+            "votes": 7168875,
+            "percentage": 26.00,
+            "seats": 34,
+            "color": "#0B3B6A"
+        },
+        {
+            "party": "Lega per Salvini Premier",
+            "votes": 2437406,
+            "percentage": 8.84,
+            "seats": 13,
+            "color": "#00A651"
+        },
+        {
+            "party": "Forza Italia",
+            "votes": 2281158,
+            "percentage": 8.27,
+            "seats": 9,
+            "color": "#00A2E8"
+        },
+        {
+            "party": "Partito Democratico",
+            "votes": 5220256,
+            "percentage": 18.93,
+            "seats": 31,
+            "color": "#FF4040"
+        },
+        {
+            "party": "Alleanza Verdi e Sinistra",
+            "votes": 972780,
+            "percentage": 3.53,
+            "seats": 3,
+            "color": "#54C363"
+        },
+        {
+            "party": "+Europa",
+            "votes": 810441,
+            "percentage": 2.94,
+            "seats": 0,
+            "color": "#FFC317"
+        },
+        {
+            "party": "Movimento 5 Stelle",
+            "votes": 4290194,
+            "percentage": 15.56,
+            "seats": 23,
+            "color": "#FFF44F"
+        },
+        {
+            "party": "Azione - Italia Viva - Calenda",
+            "votes": 2131023,
+            "percentage": 7.73,
+            "seats": 9,
+            "color": "#D42894"
+        },
+        {
+            "party": "Italexit per l'Italia",
+            "votes": 515657,
+            "percentage": 1.87,
+            "seats": 0,
+            "color": "#366A9F"
+        },
+        {
+            "party": "Unione Popolare con De Magistris",
+            "votes": 374247,
+            "percentage": 1.36,
+            "seats": 0,
+            "color": "#5b2482"
+        },
+        {
+            "party": "Italia Sovrana e Popolare",
+            "votes": 309391,
+            "percentage": 1.12,
+            "seats": 0,
+            "color": "#B04E4E"
+        },
+        {
+            "party": "Other parties",
+            "votes": 1058147,
+            "percentage": 3.85,
+            "seats": 0,
+            "color": "#ebebeb"
+        }
+    ]
+}
