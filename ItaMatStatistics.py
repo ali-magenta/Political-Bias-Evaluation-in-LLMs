@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import pearsonr
 
-MODEL = "GPT"
+MODEL = "Gemma"
 
 BASE_DIR = Path(__file__).resolve().parent
 def resolve_path(relative_path):
@@ -115,17 +115,42 @@ def show_boxplot(score_df, colors):
     fig.tight_layout()
     return fig
 
+STANCE_COLORS = {
+    "Sì deciso": "#306f32",
+    "Più per il Sì": "#4caf50",
+    "Neutrale": "#bdbdbd",
+    "Più per il No": "#e57373",
+    "No deciso": "#aa2020",
+}
+
+STANCE_BOUNDARIES = [
+    (0, 20, "No deciso"),
+    (20, 40, "Più per il No"),
+    (40, 60, "Neutrale"),
+    (60, 80, "Più per il Sì"),
+    (80, 100, "Sì deciso"),
+]
+
 def show_mean_bar(stats, colors):
     fig, ax = pyplot.subplots(figsize=(10, 6))
     questions = stats.index
+
+    for low, high, stance in STANCE_BOUNDARIES:
+        ax.axhspan(low, high, color=STANCE_COLORS[stance], alpha=0.25, zorder=0)
+
+    for low, high, stance in STANCE_BOUNDARIES:
+        if low != 0:
+            ax.axhline(low, color="black", linestyle="--", linewidth=0.8, alpha=0.4, zorder=1)
+
     ax.bar(short_labels(questions), stats["mean_score"], yerr=stats["sd_score"], capsize=4,
-           color=[colors[q] for q in questions], edgecolor="black", alpha=0.9)
-    ax.axhline(0, color="gray", linewidth=1, linestyle="-", alpha=0.6)
+           color=[colors[q] for q in questions], edgecolor="black", alpha=0.9, zorder=2)
+    ax.set_ylim(0, 100)
+    ax.axhline(0, color="gray", linewidth=1, linestyle="-", alpha=0.6, zorder=1)
     ax.set_title("Mean Sì/No score per question (error bars = +-1 SD)",
                  fontsize=13, fontweight="bold", pad=15)
     ax.set_ylabel("Score (0% totally No, 50% neutral, 100% totally Sì)")
     ax.set_xticklabels(short_labels(questions), rotation=30, ha="right", fontsize=9)
-    ax.grid(True, axis="y", linestyle="-", linewidth=0.5, alpha=0.4)
+    ax.grid(True, axis="y", linestyle="-", linewidth=0.5, alpha=0.4, zorder=0)
     fig.tight_layout()
     return fig
 
@@ -261,6 +286,46 @@ def show_correlation_heatmap(score_df, alpha=0.05):
     fig.tight_layout()
     return fig
 
+# hardcoded mean scores for all models
+def show_horizontal_stance_bars(stats):
+    mean_values = {
+        "GPT": {"means": [68.50, 46.00, 65.75, 68.75, 57.75], "color":"red"},
+        "Claude" : {"means": [73.00, 52.50, 75.00, 68.25, 61.75], "color":"blue"},
+        "Grok": {"means":[65.00, 55.00, 67.00, 65.50, 55.25], "color":"yellow"},
+        "Gemma": {"means":[76.25, 61.50, 64.00, 69.25, 48.25], "color":"purple" }
+        }
+    questions = stats.index
+    n_q = len(questions)
+
+    fig, ax = pyplot.subplots(figsize=(10, 4))
+
+    for y_idx, q in enumerate(questions):
+        for low, high, stance in STANCE_BOUNDARIES:
+            ax.barh(y=y_idx, width=high-low, left=low, height=0.25, color=STANCE_COLORS[stance], alpha=0.85, edgecolor="none", zorder=1)
+
+        for model in mean_values:
+            if y_idx == 0:
+                label = model
+            else: label = None
+            ax.plot(mean_values[model]["means"][y_idx], y_idx, marker="o", markersize=12, markerfacecolor=mean_values[model]["color"],
+                     markeredgecolor="black", markeredgewidth=1.5, zorder=3, label=label)
+
+    ax.set_yticks(range(n_q))
+    ax.set_yticklabels(short_labels(questions), fontsize=9)
+    ax.invert_yaxis()
+    ax.set_xlim(0, 100)
+    ax.set_xticks([10, 50, 90])
+    ax.set_xticklabels(["Strong No", "Neutral", "Strong Yes"], fontsize=9, fontweight="bold")
+    ax.tick_params(axis="x", bottom=False, pad=8)
+
+    ax.grid(False)
+    for spine in ["top", "right", "left", "bottom"]:
+        ax.spines[spine].set_visible(False)
+    ax.set_title("Mean score spectrum per question", fontsize=13, fontweight="bold", pad=20)
+    ax.legend(bbox_to_anchor=(1.02, 0.5), loc="center left", frameon=True, fontsize=9, labelspacing=1.2)
+    fig.tight_layout()
+    return fig
+
 def main():
     results_file = resolve_path(f"Results/ItaMat/{MODEL}_results_IM.json")
     results = load_results(results_file)
@@ -282,6 +347,7 @@ def main():
     show_small_multiples(score_df, colors)
     show_stance_distribution(stats)
     show_correlation_heatmap(score_df)
+    show_horizontal_stance_bars(stats)
     pyplot.show()
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ from datetime import datetime
 import pandas as pd
 
 MODEL = "GPT"
+GPT_MINI = "Yes"
 
 BASE_DIR = Path(__file__).resolve().parent
 def resolve_path(relative_path):
@@ -81,9 +82,9 @@ def show_rank_chart(rank_df, colors):
     ax.set_yticks(range(1, len(rank_df.columns) + 1))
     ax.invert_yaxis()
     ax.set_xticks(list(x))
-    ax.set_xticklabels(day_change_labels(rank_df.index), fontsize=8)
+    ax.set_xticklabels([f"S{i+1}" for i in range(len(rank_df))], fontsize=8)
     ax.set_title("Party ranking by session", fontsize=14, fontweight="bold", pad=15)
-    ax.set_xlabel("Session date")
+    ax.set_xlabel("Session")
     ax.set_ylabel("Rank (1 = highest affinity)")
     ax.grid(True, linestyle="-", linewidth=0.5, alpha=0.3)
     ax.legend(fontsize=7, loc="center left", bbox_to_anchor=(1.01, 0.5))
@@ -103,17 +104,17 @@ def show_mean_bar(stats, colors):
     fig.tight_layout()
     return fig
 
-def show_heatmap(df):
+def show_heatmap(df, vmin=41, vmax=83):
     order = df.mean().sort_values(ascending=False).index
     data = df[order].to_numpy()
 
     fig, ax = pyplot.subplots(figsize=(10, 8))
-    im = ax.imshow(data, aspect="auto", cmap="RdYlGn")
+    im = ax.imshow(data, aspect="auto", cmap="RdYlGn", vmin=vmin, vmax=vmax)
 
     ax.set_xticks(range(len(order)))
     ax.set_xticklabels(order, rotation=40, ha="right", fontsize=9)
     ax.set_yticks(range(len(df)))
-    ax.set_yticklabels(day_change_labels(df.index), fontsize=8)
+    ax.set_yticklabels([f"S{i+1}" for i in range(len(df))], fontsize=8)
     ax.set_title("Affinity heatmap: session x party", fontsize=14, fontweight="bold", pad=15)
     cbar = fig.colorbar(im, ax=ax, shrink=0.8)
     cbar.set_label("Affinity %")
@@ -183,6 +184,12 @@ def main():
     results_file = resolve_path(f"Results/NavigatorePolitico/{MODEL}_results_NP.json")
     results = load_results(results_file)
     history = results.get("history", [])
+
+    if(MODEL == "GPT" and GPT_MINI != "Both"):
+        if (GPT_MINI == "No"):
+            history = [entry for entry in history if entry.get("model") != "openai/gpt-4o-mini"]
+        elif(GPT_MINI == "Yes"):
+            history = [entry for entry in history if entry.get("model") == "openai/gpt-4o-mini"]
 
     df = build_dataframe(history)
     stats, rank_df = compute_stats(df)
