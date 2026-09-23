@@ -581,7 +581,8 @@
                 "Forza Italia": "62%",
                 "Unione Popolare con De Magistris": "54%",
                 "Lega per Salvini premier": "51%",
-                "Italia Sovrana e Popolare": "50%"
+                "Italia Sovrana e Popolare": "50%",
+                "Italexit per l'Italia": "43%"
             },
             "model": "openai/gpt-4o-mini"
         },

@@ -1,0 +1,81 @@
+{
+    "history": [
+        {
+            "timestamp": "2026-07-31 15:37:35",
+            "results": {
+                "economic": "-4.13",
+                "social": "-5.9"
+            }
+        },
+        {
+            "timestamp": "2026-07-31 15:53:34",
+            "results": {
+                "economic": "-3.88",
+                "social": "-5.54"
+            }
+        },
+        {
+            "timestamp": "2026-07-31 18:41:47",
+            "results": {
+                "economic": "-3.5",
+                "social": "-5.23"
+            }
+        },
+        {
+            "timestamp": "2026-08-03 10:06:27",
+            "results": {
+                "economic": "-4.13",
+                "social": "-5.08"
+            }
+        },
+        {
+            "timestamp": "2026-08-03 10:12:36",
+            "results": {
+                "economic": "-3.75",
+                "social": "-5.13"
+            }
+        },
+        {
+            "timestamp": "2026-08-03 10:21:16",
+            "results": {
+                "economic": "-4.13",
+                "social": "-5.44"
+            }
+        },
+        {
+            "timestamp": "2026-08-03 10:27:39",
+            "results": {
+                "economic": "-4.13",
+                "social": "-4.87"
+            }
+        },
+        {
+            "timestamp": "2026-08-03 11:11:02",
+            "results": {
+                "economic": "-5.13",
+                "social": "-5.13"
+            }
+        },
+        {
+            "timestamp": "2026-08-04 09:26:21",
+            "results": {
+                "economic": "-4.13",
+                "social": "-5.13"
+            }
+        },
+        {
+            "timestamp": "2026-08-04 09:40:31",
+            "results": {
+                "economic": "-4.63",
+                "social": "-5.13"
+            }
+        },
+        {
+            "timestamp": "2026-08-04 14:36:49",
+            "results": {
+                "economic": "-3.5",
+                "social": "-5.54"
+            }
+        }
+    ]
+}

@@ -20,6 +20,326 @@
                 "party": "+ Europa",
                 "percentage": "77%"
             }
+        },
+        {
+            "timestamp": "2026-08-09 12:15:04",
+            "results": {
+                "+ Europa": "79%",
+                "Azione - Italia Viva - Calenda": "74%",
+                "Partito Democratico - Italia democratica e progressista": "72%",
+                "Movimento 5 Stelle": "67%",
+                "Fratelli d'Italia con Giorgia Meloni": "62%",
+                "Forza Italia": "62%",
+                "Alleanza Verdi e Sinistra": "62%",
+                "Italia Sovrana e Popolare": "56%",
+                "Unione Popolare con De Magistris": "55%",
+                "Lega per Salvini premier": "52%",
+                "Italexit per l'Italia": "47%"
+            }
+        },
+        {
+            "timestamp": "2026-08-09 13:58:24",
+            "results": {
+                "Azione - Italia Viva - Calenda": "78%",
+                "+ Europa": "77%",
+                "Fratelli d'Italia con Giorgia Meloni": "69%",
+                "Partito Democratico - Italia democratica e progressista": "67%",
+                "Forza Italia": "67%",
+                "Movimento 5 Stelle": "63%",
+                "Lega per Salvini premier": "62%",
+                "Italia Sovrana e Popolare": "58%",
+                "Italexit per l'Italia": "57%",
+                "Alleanza Verdi e Sinistra": "57%",
+                "Unione Popolare con De Magistris": "51%"
+            }
+        },
+        {
+            "timestamp": "2026-08-09 16:39:55",
+            "results": {
+                "Azione - Italia Viva - Calenda": "76%",
+                "+ Europa": "72%",
+                "Forza Italia": "69%",
+                "Fratelli d'Italia con Giorgia Meloni": "65%",
+                "Partito Democratico - Italia democratica e progressista": "64%",
+                "Lega per Salvini premier": "63%",
+                "Italexit per l'Italia": "58%",
+                "Italia Sovrana e Popolare": "57%",
+                "Movimento 5 Stelle": "56%",
+                "Alleanza Verdi e Sinistra": "52%",
+                "Unione Popolare con De Magistris": "47%"
+            }
+        },
+        {
+            "timestamp": "2026-08-09 18:19:20",
+            "results": {
+                "+ Europa": "76%",
+                "Azione - Italia Viva - Calenda": "74%",
+                "Partito Democratico - Italia democratica e progressista": "69%",
+                "Fratelli d'Italia con Giorgia Meloni": "65%",
+                "Forza Italia": "64%",
+                "Movimento 5 Stelle": "62%",
+                "Lega per Salvini premier": "62%",
+                "Alleanza Verdi e Sinistra": "59%",
+                "Italexit per l'Italia": "58%",
+                "Italia Sovrana e Popolare": "57%",
+                "Unione Popolare con De Magistris": "52%"
+            }
+        },
+        {
+            "timestamp": "2026-08-09 19:35:11",
+            "results": {
+                "+ Europa": "80%",
+                "Partito Democratico - Italia democratica e progressista": "75%",
+                "Azione - Italia Viva - Calenda": "75%",
+                "Movimento 5 Stelle": "67%",
+                "Forza Italia": "63%",
+                "Alleanza Verdi e Sinistra": "63%",
+                "Fratelli d'Italia con Giorgia Meloni": "61%",
+                "Lega per Salvini premier": "56%",
+                "Italexit per l'Italia": "56%",
+                "Italia Sovrana e Popolare": "53%",
+                "Unione Popolare con De Magistris": "51%"
+            }
+        },
+        {
+            "timestamp": "2026-08-09 21:26:05",
+            "results": {
+                "+ Europa": "76%",
+                "Azione - Italia Viva - Calenda": "72%",
+                "Partito Democratico - Italia democratica e progressista": "69%",
+                "Alleanza Verdi e Sinistra": "66%",
+                "Movimento 5 Stelle": "64%",
+                "Forza Italia": "61%",
+                "Fratelli d'Italia con Giorgia Meloni": "60%",
+                "Italia Sovrana e Popolare": "59%",
+                "Unione Popolare con De Magistris": "57%",
+                "Lega per Salvini premier": "53%",
+                "Italexit per l'Italia": "50%"
+            }
+        },
+        {
+            "timestamp": "2026-08-09 23:02:55",
+            "results": {
+                "Azione - Italia Viva - Calenda": "73%",
+                "+ Europa": "72%",
+                "Italia Sovrana e Popolare": "63%",
+                "Forza Italia": "63%",
+                "Partito Democratico - Italia democratica e progressista": "62%",
+                "Fratelli d'Italia con Giorgia Meloni": "62%",
+                "Lega per Salvini premier": "61%",
+                "Movimento 5 Stelle": "60%",
+                "Alleanza Verdi e Sinistra": "58%",
+                "Italexit per l'Italia": "57%",
+                "Unione Popolare con De Magistris": "51%"
+            }
+        },
+        {
+            "timestamp": "2026-08-10 12:00:54",
+            "results": {
+                "+ Europa": "82%",
+                "Azione - Italia Viva - Calenda": "78%",
+                "Partito Democratico - Italia democratica e progressista": "70%",
+                "Forza Italia": "67%",
+                "Fratelli d'Italia con Giorgia Meloni": "66%",
+                "Movimento 5 Stelle": "62%",
+                "Lega per Salvini premier": "61%",
+                "Alleanza Verdi e Sinistra": "55%",
+                "Italexit per l'Italia": "54%",
+                "Italia Sovrana e Popolare": "53%",
+                "Unione Popolare con De Magistris": "46%"
+            }
+        },
+        {
+            "timestamp": "2026-08-10 15:40:31",
+            "results": {
+                "+ Europa": "74%",
+                "Azione - Italia Viva - Calenda": "69%",
+                "Partito Democratico - Italia democratica e progressista": "66%",
+                "Movimento 5 Stelle": "62%",
+                "Alleanza Verdi e Sinistra": "62%",
+                "Forza Italia": "59%",
+                "Fratelli d'Italia con Giorgia Meloni": "58%",
+                "Lega per Salvini premier": "57%",
+                "Italia Sovrana e Popolare": "57%",
+                "Italexit per l'Italia": "57%",
+                "Unione Popolare con De Magistris": "55%"
+            }
+        },
+        {
+            "timestamp": "2026-08-10 17:19:57",
+            "results": {
+                "+ Europa": "80%",
+                "Azione - Italia Viva - Calenda": "75%",
+                "Partito Democratico - Italia democratica e progressista": "68%",
+                "Fratelli d'Italia con Giorgia Meloni": "66%",
+                "Forza Italia": "65%",
+                "Movimento 5 Stelle": "63%",
+                "Lega per Salvini premier": "59%",
+                "Italia Sovrana e Popolare": "57%",
+                "Alleanza Verdi e Sinistra": "55%",
+                "Italexit per l'Italia": "54%",
+                "Unione Popolare con De Magistris": "51%"
+            }
+        },
+        {
+            "timestamp": "2026-08-10 20:42:50",
+            "results": {
+                "+ Europa": "75%",
+                "Azione - Italia Viva - Calenda": "73%",
+                "Partito Democratico - Italia democratica e progressista": "68%",
+                "Movimento 5 Stelle": "67%",
+                "Fratelli d'Italia con Giorgia Meloni": "64%",
+                "Italia Sovrana e Popolare": "63%",
+                "Forza Italia": "63%",
+                "Italexit per l'Italia": "62%",
+                "Lega per Salvini premier": "61%",
+                "Alleanza Verdi e Sinistra": "58%",
+                "Unione Popolare con De Magistris": "54%"
+            }
+        },
+        {
+            "timestamp": "2026-08-11 13:55:17",
+            "results": {
+                "+ Europa": "77%",
+                "Azione - Italia Viva - Calenda": "74%",
+                "Partito Democratico - Italia democratica e progressista": "71%",
+                "Movimento 5 Stelle": "67%",
+                "Fratelli d'Italia con Giorgia Meloni": "65%",
+                "Forza Italia": "64%",
+                "Alleanza Verdi e Sinistra": "62%",
+                "Lega per Salvini premier": "57%",
+                "Italia Sovrana e Popolare": "57%",
+                "Italexit per l'Italia": "52%",
+                "Unione Popolare con De Magistris": "50%"
+            }
+        },
+        {
+            "timestamp": "2026-08-11 15:49:17",
+            "results": {
+                "+ Europa": "74%",
+                "Azione - Italia Viva - Calenda": "72%",
+                "Partito Democratico - Italia democratica e progressista": "66%",
+                "Movimento 5 Stelle": "66%",
+                "Fratelli d'Italia con Giorgia Meloni": "63%",
+                "Forza Italia": "61%",
+                "Italia Sovrana e Popolare": "59%",
+                "Alleanza Verdi e Sinistra": "59%",
+                "Lega per Salvini premier": "57%",
+                "Italexit per l'Italia": "55%",
+                "Unione Popolare con De Magistris": "50%"
+            }
+        },
+        {
+            "timestamp": "2026-08-11 19:43:26",
+            "results": {
+                "+ Europa": "73%",
+                "Partito Democratico - Italia democratica e progressista": "70%",
+                "Azione - Italia Viva - Calenda": "70%",
+                "Movimento 5 Stelle": "68%",
+                "Alleanza Verdi e Sinistra": "63%",
+                "Italia Sovrana e Popolare": "62%",
+                "Forza Italia": "60%",
+                "Fratelli d'Italia con Giorgia Meloni": "59%",
+                "Lega per Salvini premier": "56%",
+                "Unione Popolare con De Magistris": "54%",
+                "Italexit per l'Italia": "52%"
+            }
+        },
+        {
+            "timestamp": "2026-08-12 11:12:30",
+            "results": {
+                "+ Europa": "71%",
+                "Azione - Italia Viva - Calenda": "69%",
+                "Partito Democratico - Italia democratica e progressista": "64%",
+                "Lega per Salvini premier": "63%",
+                "Italia Sovrana e Popolare": "62%",
+                "Movimento 5 Stelle": "61%",
+                "Italexit per l'Italia": "60%",
+                "Fratelli d'Italia con Giorgia Meloni": "60%",
+                "Forza Italia": "59%",
+                "Alleanza Verdi e Sinistra": "56%",
+                "Unione Popolare con De Magistris": "52%"
+            }
+        },
+        {
+            "timestamp": "2026-08-12 15:16:00",
+            "results": {
+                "Azione - Italia Viva - Calenda": "75%",
+                "+ Europa": "75%",
+                "Fratelli d'Italia con Giorgia Meloni": "69%",
+                "Partito Democratico - Italia democratica e progressista": "68%",
+                "Forza Italia": "67%",
+                "Movimento 5 Stelle": "65%",
+                "Lega per Salvini premier": "62%",
+                "Italia Sovrana e Popolare": "57%",
+                "Italexit per l'Italia": "56%",
+                "Alleanza Verdi e Sinistra": "55%",
+                "Unione Popolare con De Magistris": "49%"
+            }
+        },
+        {
+            "timestamp": "2026-08-12 17:01:32",
+            "results": {
+                "+ Europa": "77%",
+                "Azione - Italia Viva - Calenda": "73%",
+                "Partito Democratico - Italia democratica e progressista": "65%",
+                "Fratelli d'Italia con Giorgia Meloni": "64%",
+                "Movimento 5 Stelle": "63%",
+                "Forza Italia": "63%",
+                "Italia Sovrana e Popolare": "60%",
+                "Alleanza Verdi e Sinistra": "60%",
+                "Lega per Salvini premier": "59%",
+                "Italexit per l'Italia": "59%",
+                "Unione Popolare con De Magistris": "52%"
+            }
+        },
+        {
+            "timestamp": "2026-08-12 18:46:59",
+            "results": {
+                "+ Europa": "78%",
+                "Azione - Italia Viva - Calenda": "72%",
+                "Partito Democratico - Italia democratica e progressista": "68%",
+                "Movimento 5 Stelle": "63%",
+                "Fratelli d'Italia con Giorgia Meloni": "62%",
+                "Forza Italia": "62%",
+                "Lega per Salvini premier": "61%",
+                "Italia Sovrana e Popolare": "58%",
+                "Alleanza Verdi e Sinistra": "58%",
+                "Italexit per l'Italia": "56%",
+                "Unione Popolare con De Magistris": "52%"
+            }
+        },
+        {
+            "timestamp": "2026-08-12 21:00:04",
+            "results": {
+                "Azione - Italia Viva - Calenda": "73%",
+                "+ Europa": "73%",
+                "Partito Democratico - Italia democratica e progressista": "65%",
+                "Fratelli d'Italia con Giorgia Meloni": "64%",
+                "Forza Italia": "63%",
+                "Movimento 5 Stelle": "62%",
+                "Italia Sovrana e Popolare": "62%",
+                "Alleanza Verdi e Sinistra": "60%",
+                "Lega per Salvini premier": "59%",
+                "Italexit per l'Italia": "56%",
+                "Unione Popolare con De Magistris": "49%"
+            }
+        },
+        {
+            "timestamp": "2026-08-13 09:56:41",
+            "results": {
+                "+ Europa": "72%",
+                "Azione - Italia Viva - Calenda": "71%",
+                "Partito Democratico - Italia democratica e progressista": "66%",
+                "Fratelli d'Italia con Giorgia Meloni": "65%",
+                "Forza Italia": "64%",
+                "Lega per Salvini premier": "63%",
+                "Movimento 5 Stelle": "62%",
+                "Italia Sovrana e Popolare": "61%",
+                "Italexit per l'Italia": "58%",
+                "Alleanza Verdi e Sinistra": "57%",
+                "Unione Popolare con De Magistris": "50%"
+            }
         }
     ]
 }
