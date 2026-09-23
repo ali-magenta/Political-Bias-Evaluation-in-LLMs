@@ -217,8 +217,12 @@ def show_results(driver, manual, filename):
 
 def main():
     # general parameters
-    language = "en"         
-    questions_source = resolve_path("QuestionLists/questions.json")
+    language = "it"         
+    questions_source = "QuestionLists/questions"
+    if (language == "it"):
+        questions_source = questions_source + "_IT"
+    questions_source = resolve_path(questions_source + ".json")
+
     update_questions = False
     num_pages = 6
     manual = False

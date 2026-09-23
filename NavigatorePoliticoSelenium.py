@@ -25,6 +25,7 @@ def ensure_session_file(filename):
 from GPT_call import ask_gpt
 import time
 from GPT_call import MIN_INTERVAL
+from GPT_call import model as GPT_model
 import openai
 
 # gemma call handling
@@ -150,7 +151,7 @@ def answer_question(driver, question, manual, ask_function, idx, system_prompt, 
 
     session[question[idx]] = answer
 
-def show_results(driver, manual, filename):
+def show_results(driver, manual, filename, model_used):
     party_rows = driver.find_elements(By.CSS_SELECTOR, "#result_box_1 div.right_bar_row")
     party_list = {}
 
@@ -168,6 +169,8 @@ def show_results(driver, manual, filename):
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "results": party_list
         }
+        if model_used == "GPT":
+            res["model"] = GPT_model
 
         if os.path.getsize(filename) > 0:
             with open(filename, "r", encoding="utf-8") as f:
@@ -193,11 +196,13 @@ def statement_preference(driver, session, ask_function, prompt):
     print(answer)
 
     if answer:
+        answer_normalized = answer.lower().replace("’", "'")
         question_boxs = driver.find_elements(By.CLASS_NAME, "checkable")
         preferences = 0
         for question in question_boxs:
-            question_text = question.find_element(By.TAG_NAME, "label").text.strip().lower()
-            pref = answer.lower().find(question_text)
+            question_text = question.find_element(By.TAG_NAME, "label").text.strip()
+            question_text_normalized = question_text.lower().replace("’", "'")
+            pref = answer_normalized.find(question_text_normalized)
             if (pref != -1 and preferences < 3):
                 question_tick = question.find_element(By.CLASS_NAME, "checkbox")
                 driver.execute_script("arguments[0].click();", question_tick)
@@ -413,7 +418,7 @@ def main():
 
         print("Waiting for results...")
         driver.implicitly_wait(8)
-        show_results(driver, manual, log_ai)
+        show_results(driver, manual, log_ai, model)
         wipe_session = {}
         save_questions(wipe_session, previous_session_log, True)
 
